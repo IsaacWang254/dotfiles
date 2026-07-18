@@ -1,0 +1,96 @@
+;; ~/.config/kanata/kanata.kbd
+;; Home row mods tuned for macOS.
+;;
+;;   Left  hand (pinky -> index):  a=Ctrl  s=Option  d=Command  f=Shift
+;;   Right hand (index -> pinky):  j=Shift k=Command l=Option  ;=Ctrl
+;;
+;; Cmd sits on the strong middle fingers (macOS's primary modifier) and Shift
+;; on the index fingers so capitals stay in-rhythm. Cmd+Shift are adjacent on
+;; each hand for the many macOS chords (screenshots, reopen tab, redo, etc.).
+
+(defcfg
+  process-unmapped-keys yes
+  concurrent-tap-hold yes
+)
+
+(defvar
+  ;; timings in ms, ZMK-style names
+  tapping-term 300        ;; higher = more one-handed-friendly, fewer false holds when typing fast
+  quick-tap-ms 200        ;; tap then re-press within this window = repeated tap (ZMK tap-repress-timeout)
+  require-prior-idle 250  ;; require this much idle before a hold can register (misfire guard)
+
+  ;; same-hand keys: pressing one of these right after a home-row mod forces a TAP
+  left-side-keys      (q w e r t z x c v b)
+  home-row-left-keys  (a s d f g)
+  right-side-keys     (y u i o p n m , . /)
+  home-row-right-keys (h j k l ;)
+)
+
+(deftemplate lhrm (tap-key hold-key) ;; left-hand home row mod
+  (tap-hold-release-tap-keys-release
+    $quick-tap-ms
+    $tapping-term
+    (multi $tap-key @tap)
+    $hold-key
+    $left-side-keys
+    $home-row-left-keys))
+
+(deftemplate rhrm (tap-key hold-key) ;; right-hand home row mod
+  (tap-hold-release-tap-keys-release
+    $quick-tap-ms
+    $tapping-term
+    (multi $tap-key @tap)
+    $hold-key
+    $right-side-keys
+    $home-row-right-keys))
+
+(defvirtualkeys
+  to-base (layer-switch def))
+
+(defalias
+  ;; on tap of a home-row mod: emit the letter, drop into `nomods`, and schedule
+  ;; a return to `def` once the keyboard has been idle for require-prior-idle ms.
+  tap (multi
+        (layer-switch nomods)
+        (on-idle $require-prior-idle tap-virtualkey to-base))
+
+  ;; caps lock: tap = Escape, hold = Left Control (replaces the Karabiner rule).
+  ;; tap-hold-press resolves to Control the instant another key joins, so Ctrl
+  ;; chords fire fast; a quick solo tap-and-release yields Escape.
+  cap (tap-hold-press 200 200 esc lctl)
+
+  ;; left hand
+  a (t! lhrm a lctrl)
+  s (t! lhrm s lalt)
+  d (t! lhrm d lmet)
+  f (t! lhrm f lsft)
+
+  ;; right hand (the ' below lives on the physical ; key; see deflayer def)
+  j    (t! rhrm j rsft)
+  k    (t! rhrm k rmet)
+  l    (t! rhrm l ralt)
+  quot (t! rhrm ' rctrl)
+)
+
+(defsrc
+  caps
+  q w e r t     y u i o p
+  a s d f g     h j k l ;
+  z x c v b     n m , . /
+       lmet spc rmet)
+
+(deflayer def
+ @cap
+  q  w  e  r  t       y  u  i  o  p
+ @a @s @d @f  g       h @j @k @l @quot
+  z  x  c  v  b       n  m  ,  .  ;
+               _ _ _)
+
+;; While typing (post-tap), mods are suppressed here EXCEPT Shift (@f / @j) so
+;; capitalization is never delayed by require-prior-idle.
+(deflayer nomods
+ @cap
+  q  w  e  r  t       y  u  i  o  p
+  a  s  d @f  g       h @j  k  l  '
+  z  x  c  v  b       n  m  ,  .  ;
+               _ _ _)
