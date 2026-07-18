@@ -80,6 +80,13 @@ sudo launchctl kickstart -k system/org.pqrs.Karabiner-VirtualHIDDevice-Daemon 2>
 sudo launchctl kickstart -k system/com.kanata 2>/dev/null || true
 
 # ---------------------------------------------------------------------------
+# Ghostty (terminal)
+# ---------------------------------------------------------------------------
+echo "==> Symlinking Ghostty config -> ~/.config/ghostty/config"
+mkdir -p "$HOME/.config/ghostty"
+ln -sf "$DOTFILES/ghostty/config" "$HOME/.config/ghostty/config"
+
+# ---------------------------------------------------------------------------
 # AeroSpace (tiling window manager)
 # ---------------------------------------------------------------------------
 echo "==> Symlinking AeroSpace config -> ~/.config/aerospace/aerospace.toml"
