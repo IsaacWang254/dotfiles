@@ -7,6 +7,7 @@ Personal config, portable across machines.
 | What | Where | Notes |
 |------|-------|-------|
 | **kanata** home-row mods (macOS) | [`kanata/`](kanata/) | Home-row modifiers + CapsLock→Esc/Ctrl via [kanata](https://github.com/jtroo/kanata) |
+| **AeroSpace** tiling WM (macOS) | [`aerospace/`](aerospace/) | Keyboard-driven tiling via [AeroSpace](https://github.com/nikitabobko/AeroSpace) |
 | **Neovim** | [github.com/IsaacWang254/nvim](https://github.com/IsaacWang254/nvim) | Lives in its own repo — clone into `~/.config/nvim` |
 
 ### Neovim
@@ -121,3 +122,46 @@ sluggish, lower `tapping-term`.
 | Keys pass through untouched, caps still toggles | kanata not intercepting: driver not connected, or permissions missing (step 3) |
 | `exclusive access ... device already open` | Something else grabbed the keyboard — usually **Karabiner-Elements** (step 4) |
 | `needs Accessibility permission` in err log | Grant Accessibility too, not just Input Monitoring (step 3) |
+
+---
+
+## AeroSpace (tiling window manager)
+
+Keyboard-driven i3-style tiling. No SIP disabling required. Modifier is **Option (alt)**.
+
+### Keybindings
+
+| Keys | Action |
+|------|--------|
+| `alt` + `h/j/k/l` | Focus window left/down/up/right |
+| `alt-shift` + `h/j/k/l` | Move window |
+| `alt` + `1`–`9` | Switch to workspace |
+| `alt-shift` + `1`–`9` | Send window to workspace (and follow) |
+| `alt-tab` | Previous workspace |
+| `alt` + `-` / `=` | Resize smaller / larger |
+| `alt-/` | Toggle tiling orientation |
+| `alt-,` | Accordion layout |
+| `alt-f` | Fullscreen |
+| `alt-shift-space` | Float / unfloat window |
+| `alt-shift-c` | Reload config |
+| `alt-shift-;` | Enter *service* mode (then `esc` back; `r` reset tree, `backspace` close others, `alt-shift-hjkl` join) |
+
+> **Home-row-mod note:** the focus keys are `hjkl` (right hand). Because the kanata
+> config forces a *tap* when you hold a right-hand mod + a right-hand key, drive
+> these with **left Option** (physical left Option key, or home-row `s`), not
+> home-row `l`.
+
+### Setup
+
+```sh
+brew install --cask nikitabobko/tap/aerospace
+```
+
+1. `install.sh` symlinks `aerospace/aerospace.toml` → `~/.config/aerospace/`.
+2. Launch AeroSpace (it lives in the menu bar) and grant it **Accessibility**
+   (System Settings → Privacy & Security → Accessibility).
+3. **Quit Rectangle / Magnet / other window managers** and turn off their
+   "open at login" — running two window managers fights over window placement.
+4. `start-at-login = true` is set, so it comes back on reboot.
+
+Edit `aerospace/aerospace.toml`, then `alt-shift-c` (or `aerospace reload-config`) to apply.

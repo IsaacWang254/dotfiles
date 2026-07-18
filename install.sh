@@ -79,6 +79,21 @@ sudo launchctl bootstrap system /Library/LaunchDaemons/com.kanata.plist 2>/dev/n
 sudo launchctl kickstart -k system/org.pqrs.Karabiner-VirtualHIDDevice-Daemon 2>/dev/null || true
 sudo launchctl kickstart -k system/com.kanata 2>/dev/null || true
 
+# ---------------------------------------------------------------------------
+# AeroSpace (tiling window manager)
+# ---------------------------------------------------------------------------
+echo "==> Symlinking AeroSpace config -> ~/.config/aerospace/aerospace.toml"
+mkdir -p "$HOME/.config/aerospace"
+ln -sf "$DOTFILES/aerospace/aerospace.toml" "$HOME/.config/aerospace/aerospace.toml"
+
+if ! command -v aerospace >/dev/null 2>&1; then
+  echo "   note: AeroSpace not installed. Install with:"
+  echo "         brew install --cask nikitabobko/tap/aerospace"
+  echo "         then grant it Accessibility and quit Rectangle (see README)."
+else
+  aerospace reload-config 2>/dev/null || true
+fi
+
 sleep 2
 echo
 echo "==> Done. kanata process:"
