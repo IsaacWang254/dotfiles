@@ -65,11 +65,11 @@
   d (t! lhrm d lmet)
   f (t! lhrm f lsft)
 
-  ;; right hand (the ' below lives on the physical ; key; see deflayer def)
+  ;; right hand
   j    (t! rhrm j rsft)
   k    (t! rhrm k rmet)
   l    (t! rhrm l ralt)
-  quot (t! rhrm ' rctrl)
+  scln (t! rhrm ; rctrl)
 )
 
 (defsrc
@@ -82,8 +82,8 @@
 (deflayer def
  @cap
   q  w  e  r  t       y  u  i  o  p
- @a @s @d @f  g       h @j @k @l @quot
-  z  x  c  v  b       n  m  ,  .  ;
+ @a @s @d @f  g       h @j @k @l @scln
+  z  x  c  v  b       n  m  ,  .  /
                _ _ _)
 
 ;; While typing (post-tap), mods are suppressed here EXCEPT Shift (@f / @j) so
@@ -91,6 +91,6 @@
 (deflayer nomods
  @cap
   q  w  e  r  t       y  u  i  o  p
-  a  s  d @f  g       h @j  k  l  '
-  z  x  c  v  b       n  m  ,  .  ;
+  a  s  d @f  g       h @j  k  l  ;
+  z  x  c  v  b       n  m  ,  .  /
                _ _ _)
