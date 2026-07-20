@@ -6,7 +6,7 @@ Personal config, portable across machines.
 
 | What | Where | Notes |
 |------|-------|-------|
-| **kanata** home-row mods (macOS) | [`kanata/`](kanata/) | Home-row modifiers + CapsLock→Esc/Ctrl via [kanata](https://github.com/jtroo/kanata) |
+| **kanata** conservative remap (macOS) | [`kanata/`](kanata/) | Ordinary typing unchanged; CapsLock→Esc/Ctrl via [kanata](https://github.com/jtroo/kanata) |
 | **AeroSpace** tiling WM (macOS) | [`aerospace/`](aerospace/) | Keyboard-driven tiling via [AeroSpace](https://github.com/nikitabobko/AeroSpace) |
 | **Ghostty** terminal | [`ghostty/`](ghostty/) | Nerd Font + native auto light/dark theme |
 | **Neovim** | [github.com/IsaacWang254/nvim](https://github.com/IsaacWang254/nvim) | Lives in its own repo — clone into `~/.config/nvim` |
@@ -21,20 +21,20 @@ git clone https://github.com/IsaacWang254/nvim ~/.config/nvim
 
 ---
 
-## kanata (macOS home-row mods)
+## kanata (macOS key remapping)
 
-Tap the keys normally; **hold** them for modifiers.
+The configuration deliberately keeps normal typing conventional. Letter,
+number, punctuation, and physical modifier keys pass through one-to-one. Caps
+Lock is the only dual-role key:
 
 ```
-Left  hand (pinky → index):   a=Ctrl   s=Option   d=Command   f=Shift
-Right hand (index → pinky):   j=Shift  k=Command  l=Option    ;=Ctrl
 CapsLock:  tap = Escape,  hold = Left Control
 ```
 
-Command sits on the strong middle fingers (macOS's primary modifier) and Shift on
-the index fingers so capitals stay in-rhythm; Command+Shift are adjacent on each
-hand for the many macOS chords. A `require-prior-idle` guard (via the `nomods`
-layer) suppresses accidental mods during fast typing.
+Unlisted media and navigation keys bypass Kanata. This replaces the previous
+timing-sensitive home-row modifiers, which could misread normal typing rolls as
+macOS shortcuts (for example, `d` followed by `o` becoming Command+O), resulting
+in accidental commands, missing letters, repeats, and lag.
 
 ### Quick install (existing machine that already has the driver + permissions)
 
@@ -99,21 +99,18 @@ Then run `~/dotfiles/install.sh`.
 ### Managing it
 
 ```sh
-# Reload after editing kanata/kanata.kbd (it's symlinked, so edits are live on reload)
-kanata --cfg ~/.config/kanata/kanata.kbd --check    # validate first
-sudo launchctl kickstart -k system/com.kanata        # apply
+# Reload after editing kanata/kanata.kbd (the file is symlinked, but the daemon
+# still needs a restart to read it)
+kanata --check --cfg ~/.config/kanata/kanata.kbd    # validate first
+sudo launchctl kickstart -k system/com.kanata       # apply
 
 # Stop / start the kanata service
-sudo launchctl bootout   system/com.kanata
+sudo launchctl bootout system/com.kanata
 sudo launchctl bootstrap system /Library/LaunchDaemons/com.kanata.plist
 
 # Logs
 tail -f /var/log/kanata.log /var/log/kanata.err.log
 ```
-
-**Tuning** (in `kanata/kanata.kbd`): if fast typing triggers accidental mods,
-raise `tapping-term` (→350) or `require-prior-idle` (→300); if holds feel
-sluggish, lower `tapping-term`.
 
 ### Troubleshooting
 
@@ -123,6 +120,8 @@ sluggish, lower `tapping-term`.
 | Keys pass through untouched, caps still toggles | kanata not intercepting: driver not connected, or permissions missing (step 3) |
 | `exclusive access ... device already open` | Something else grabbed the keyboard — usually **Karabiner-Elements** (step 4) |
 | `needs Accessibility permission` in err log | Grant Accessibility too, not just Input Monitoring (step 3) |
+| Normal letters launch commands or disappear | A stale home-row config is still running — validate the current config and restart `com.kanata` |
+| Typing lags and `/var/log/kanata.log` grows rapidly | Kanata was launched with `--debug`/`-d` — reinstall the generated service with `install.sh` and restart it |
 
 ---
 
@@ -146,11 +145,6 @@ Keyboard-driven i3-style tiling. No SIP disabling required. Modifier is **Option
 | `alt-shift-space` | Float / unfloat window |
 | `alt-shift-c` | Reload config |
 | `alt-shift-;` | Enter *service* mode (then `esc` back; `r` reset tree, `backspace` close others, `alt-shift-hjkl` join) |
-
-> **Home-row-mod note:** the focus keys are `hjkl` (right hand). Because the kanata
-> config forces a *tap* when you hold a right-hand mod + a right-hand key, drive
-> these with **left Option** (physical left Option key, or home-row `s`), not
-> home-row `l`.
 
 ### Setup
 
