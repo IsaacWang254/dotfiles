@@ -56,6 +56,9 @@ sudo tee /Library/LaunchDaemons/com.kanata.plist >/dev/null <<PLIST
     <true/>
     <key>KeepAlive</key>
     <true/>
+    <!-- Keep the remapper out of launchd's default daemon CPU/I/O throttling. -->
+    <key>ProcessType</key>
+    <string>Interactive</string>
     <key>StandardOutPath</key>
     <string>/var/log/kanata.log</string>
     <key>StandardErrorPath</key>
@@ -72,10 +75,13 @@ sudo chown root:wheel \
   /Library/LaunchDaemons/com.kanata.plist \
   /Library/LaunchDaemons/org.pqrs.Karabiner-VirtualHIDDevice-Daemon.plist
 
-echo "==> Starting services"
-# Re-bootstrap (ignore 'already bootstrapped' errors), then kickstart fresh.
-sudo launchctl bootstrap system /Library/LaunchDaemons/org.pqrs.Karabiner-VirtualHIDDevice-Daemon.plist 2>/dev/null || true
-sudo launchctl bootstrap system /Library/LaunchDaemons/com.kanata.plist 2>/dev/null || true
+echo "==> Restarting services"
+# bootout first so launchd actually re-reads plist changes (bootstrap alone
+# returns "already bootstrapped" and leaves old scheduling properties active).
+sudo launchctl bootout system/com.kanata 2>/dev/null || true
+sudo launchctl bootout system/org.pqrs.Karabiner-VirtualHIDDevice-Daemon 2>/dev/null || true
+sudo launchctl bootstrap system /Library/LaunchDaemons/org.pqrs.Karabiner-VirtualHIDDevice-Daemon.plist
+sudo launchctl bootstrap system /Library/LaunchDaemons/com.kanata.plist
 sudo launchctl kickstart -k system/org.pqrs.Karabiner-VirtualHIDDevice-Daemon 2>/dev/null || true
 sudo launchctl kickstart -k system/com.kanata 2>/dev/null || true
 

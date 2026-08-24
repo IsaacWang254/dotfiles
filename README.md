@@ -45,7 +45,9 @@ git clone https://github.com/IsaacWang254/dotfiles ~/dotfiles
 
 `install.sh` symlinks `kanata/kanata.kbd` → `~/.config/kanata/`, generates and
 installs the two LaunchDaemons (with the correct paths for this machine), and
-starts them. It does **not** do the one-time driver/permission setup below.
+starts them. The kanata LaunchDaemon uses `ProcessType=Interactive` so
+macOS does not apply its default daemon CPU/I/O throttling during builds or
+other heavy load. It does **not** do the one-time driver/permission setup below.
 
 ### First-time macOS setup (do this once per machine)
 
@@ -110,7 +112,14 @@ sudo launchctl bootstrap system /Library/LaunchDaemons/com.kanata.plist
 
 # Logs
 tail -f /var/log/kanata.log /var/log/kanata.err.log
+
+# Confirm launchd applied the latency-sensitive scheduling class
+sudo launchctl print system/com.kanata | grep -E 'spawn type|properties'
 ```
+
+If the plist changes (for example, the `ProcessType` scheduling fix), rerun
+`~/dotfiles/install.sh`; it bootouts and bootstraps the jobs so launchd re-reads
+the new properties. A plain `kickstart` only restarts the already-loaded job.
 
 ### Troubleshooting
 
@@ -120,8 +129,10 @@ tail -f /var/log/kanata.log /var/log/kanata.err.log
 | Keys pass through untouched, caps still toggles | kanata not intercepting: driver not connected, or permissions missing (step 3) |
 | `exclusive access ... device already open` | Something else grabbed the keyboard — usually **Karabiner-Elements** (step 4) |
 | `needs Accessibility permission` in err log | Grant Accessibility too, not just Input Monitoring (step 3) |
+| `output backend unavailable` / dropped keys | The DriverKit virtual-HID sink disconnected; kanata releases the grab and retries for a few seconds. Check `/var/log/karabiner/virtual_hid_device_service.log` and keep the kanata/driver versions matched |
 | Normal letters launch commands or disappear | A stale home-row config is still running — validate the current config and restart `com.kanata` |
-| Typing lags and `/var/log/kanata.log` grows rapidly | Kanata was launched with `--debug`/`-d` — reinstall the generated service with `install.sh` and restart it |
+| Typing lags during heavy CPU load | Reinstall/reload the LaunchDaemons so `ProcessType=Interactive` is applied; kanata's event and processing threads should also report `USER_INTERACTIVE` in the log |
+| `/var/log/kanata.log` grows with `virtual_hid_keyboard_ready true` | DriverKit emits a periodic readiness heartbeat; this is noisy but not a key-remapping error. Debug/trace output is the part to avoid in the service |
 
 ---
 
