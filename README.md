@@ -6,6 +6,7 @@ Personal config, portable across machines.
 
 | What | Where | Notes |
 |------|-------|-------|
+| **fish** shell | [`fish/`](fish/) | Aliases, adaptive Dracula/Alucard theme, bobthefish prompt via [fisher](https://github.com/jorgebucaran/fisher) |
 | **kanata** conservative remap (macOS) | [`kanata/`](kanata/) | Ordinary typing unchanged; CapsLock→Esc/Ctrl via [kanata](https://github.com/jtroo/kanata) |
 | **AeroSpace** tiling WM (macOS) | [`aerospace/`](aerospace/) | Keyboard-driven tiling via [AeroSpace](https://github.com/nikitabobko/AeroSpace) |
 | **Ghostty** terminal | [`ghostty/`](ghostty/) | Nerd Font + native auto light/dark theme |
@@ -171,3 +172,70 @@ brew install --cask nikitabobko/tap/aerospace
 4. `start-at-login = true` is set, so it comes back on reboot.
 
 Edit `aerospace/aerospace.toml`, then `alt-shift-c` (or `aerospace reload-config`) to apply.
+
+---
+
+## fish (shell)
+
+The tracked files are the hand-written ones only:
+
+| File | What |
+|------|------|
+| `fish/config.fish` | Env, PATH, tool hooks (direnv/fzf/zoxide/mise/atuin), aliases |
+| `fish/fish_plugins` | fisher manifest — currently `oh-my-fish/theme-bobthefish` |
+| `fish/conf.d/dracula-theme.fish` | Adaptive Dracula (dark) / Alucard (light) theme that follows the macOS appearance |
+| `fish/functions/wt.fish` | Wrapper so `wt <branch>` can `cd` the parent shell into the new worktree |
+
+Deliberately **not** tracked, because something else owns them:
+
+- `functions/fish_prompt.fish`, `fish_right_prompt.fish`, `fish_mode_prompt.fish`,
+  `fish_title.fish`, `fish_greeting.fish`, `__bobthefish_*`, `bobthefish_*` —
+  installed by fisher from `fish_plugins`, so `fisher update` regenerates them.
+- `conf.d/atuin.env.fish` — written by the atuin installer.
+- `fish_variables` — fish universal variables (theme colors, fisher state). The
+  colors here are re-derived by `dracula_theme sync`, and the rest is
+  machine-local.
+
+### Setup
+
+```sh
+brew install fish
+~/dotfiles/install.sh          # symlinks the files above, bootstraps fisher, runs `fisher update`
+```
+
+`install.sh` prints the `chsh` line if fish is not yet the login shell:
+
+```sh
+echo /opt/homebrew/bin/fish | sudo tee -a /etc/shells
+chsh -s /opt/homebrew/bin/fish
+```
+
+### Theme
+
+`dracula-theme.fish` defines a `dracula_theme` command:
+
+```sh
+dracula_theme auto      # follow macOS light/dark (default)
+dracula_theme dark      # pin Dracula
+dracula_theme light     # pin Alucard
+dracula_theme status    # show current mode + resolved appearance
+dracula_theme sync      # re-apply after editing the file
+```
+
+`reload` (alias) re-sources the theme and `config.fish` in the current shell.
+
+### Expected external tools
+
+`config.fish` guards every hook with `type -q`, so missing tools degrade
+quietly. Aliases do not — these are assumed present:
+
+```sh
+brew install eza bat fzf zoxide direnv mise atuin nvim thefuck
+```
+
+The `wt` function shells out to `~/.local/bin/wt`, which is **not** in this
+repo — the function is inert until that script exists on the machine.
+
+The `updateTiobiDev` / `tiobiLocalServer` / `tiobiLocal` / `fuck` functions
+delegate to a zsh subprocess because they are defined in work-specific
+zsh files (`~/.tiobi-local.zsh`) that are not part of this repo.
