@@ -1,11 +1,9 @@
 # AeroSpace config — keyboard-driven tiling for macOS.
 # https://nikitabobko.github.io/AeroSpace/guide
 #
-# Modifier is Option (alt). NOTE on the kanata home-row mods in this repo:
-# the focus/move keys are hjkl (right hand), and holding right-hand Option
-# (home-row `l`) + a right-hand key resolves to a TAP, not Option. So drive
-# these bindings with LEFT Option — the physical left Option key, or home-row
-# `s` (left ring, opposite hand from hjkl, chords cleanly).
+# Modifier is Option (alt). Either Option key works — the home-row mods this
+# note used to warn about are long gone, and the only remap in this repo now
+# is CapsLock (see karabiner/), which does not touch Option.
 
 # Start AeroSpace at login.
 start-at-login = true
