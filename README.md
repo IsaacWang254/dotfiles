@@ -8,7 +8,7 @@ Personal config, portable across machines.
 |------|-------|-------|
 | **kanata** conservative remap (macOS) | [`kanata/`](kanata/) | Ordinary typing unchanged; CapsLock→Esc/Ctrl via [kanata](https://github.com/jtroo/kanata) |
 | **AeroSpace** tiling WM (macOS) | [`aerospace/`](aerospace/) | Keyboard-driven tiling via [AeroSpace](https://github.com/nikitabobko/AeroSpace) |
-| **Ghostty** terminal | [`ghostty/`](ghostty/) | Nerd Font + native auto light/dark theme |
+| **Ghostty** terminal | [`ghostty/`](ghostty/) | NK57 Monospace + native auto light/dark theme |
 | **Neovim** | [github.com/IsaacWang254/nvim](https://github.com/IsaacWang254/nvim) | Lives in its own repo — clone into `~/.config/nvim` |
 
 ### Neovim

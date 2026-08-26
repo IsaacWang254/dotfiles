@@ -1,5 +1,6 @@
-font-family = IoskeleyMonoTerm Nerd Font
-font-size = 14
+font-family = "NK57 Monospace"
+font-size = 13
+adjust-cell-height = 20%
 theme = light:GitHub Light Default,dark:GitHub Dark Default
 
 confirm-close-surface = false
