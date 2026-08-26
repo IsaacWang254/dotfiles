@@ -1,21 +1,64 @@
-font-family = "NK57 Monospace"
+# Ghostty — https://ghostty.org/docs/config
+#
+# This file is the source of truth. It is symlinked to ~/.config/ghostty/config
+# by install.sh.
+#
+# NOTE: on macOS Ghostty ALSO reads
+#   ~/Library/Application Support/com.mitchellh.ghostty/config
+# and that file WINS on any key set in both. It is deliberately not present —
+# if Ghostty ever stops honouring this file, check whether something (the app's
+# own settings UI, for instance) recreated it.
+
+# --- Font ---------------------------------------------------------------
+# NK57 Monospace patched with Nerd Fonts glyphs. Not installed by this repo:
+#   https://github.com/IsaacWang254/nk57-monospace-nerd-font
+# Without it, this falls back to an unpatched face.
+font-family = "NK57 Monospace Nerd Font Mono"
 font-size = 13
 adjust-cell-height = 20%
-theme = light:GitHub Light Default,dark:GitHub Dark Default
+adjust-cell-width = 0
 
-confirm-close-surface = false
-#background-opacity = 0.8
+# --- Colours ------------------------------------------------------------
+theme = "Github Dark"
+background = #000000
+foreground = #ffffff
+palette = 6=#39c5cf
+selection-background = #07284f
+cursor-color = #FFFFFF
+split-divider-color = #8f8f8f
+unfocused-split-opacity = 1
 
-shell-integration-features=no-cursor
-cursor-style-blink=false
-clipboard-paste-bracketed-safe = false
-cursor-invert-fg-bg=true
+# --- Cursor -------------------------------------------------------------
+cursor-style = bar
+cursor-style-blink = true
 
-window-theme = ghostty
-window-decoration = none
+# --- Window -------------------------------------------------------------
+window-theme = auto
+macos-titlebar-style = tabs
+macos-option-as-alt = true
+scrollbar = system
+scrollback-limit = 15000000
 
-keybind = alt+q=close_surface
-keybind = ctrl+t=new_tab
+# --- Quick terminal (super+\) -------------------------------------------
+quick-terminal-position = bottom
+quick-terminal-animation-duration = 0
 
-window-padding-color=extend
-window-padding-balance = true
+# --- Mouse --------------------------------------------------------------
+mouse-shift-capture = always
+mouse-hide-while-typing = false
+mouse-scroll-multiplier = precision:1,discrete:1
+
+# --- Clipboard ----------------------------------------------------------
+copy-on-select = false
+clipboard-trim-trailing-spaces = true
+clipboard-paste-protection = true
+
+# --- Shell / behaviour --------------------------------------------------
+shell-integration-features = ssh-env,ssh-terminfo
+confirm-close-surface = true
+
+# --- Keybinds -----------------------------------------------------------
+keybind = global:super+backslash=toggle_quick_terminal
+keybind = super+e=toggle_command_palette
+keybind = shift+enter=text:\n
+keybind = alt+backspace=text:\x1b\x7f

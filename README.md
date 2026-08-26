@@ -10,6 +10,7 @@ Personal config, portable across machines.
 | **AeroSpace** tiling WM (macOS) | [`aerospace/`](aerospace/) | Keyboard-driven tiling via [AeroSpace](https://github.com/nikitabobko/AeroSpace) |
 | **Ghostty** terminal | [`ghostty/`](ghostty/) | NK57 Monospace + native auto light/dark theme |
 | **Neovim** | [github.com/IsaacWang254/nvim](https://github.com/IsaacWang254/nvim) | Lives in its own repo — clone into `~/.config/nvim` |
+| **Terminal font** | [github.com/IsaacWang254/nk57-monospace-nerd-font](https://github.com/IsaacWang254/nk57-monospace-nerd-font) | Patched build of the font `ghostty/config` asks for — own repo |
 
 ### Neovim
 
@@ -18,6 +19,21 @@ The nvim config is a standalone repo:
 ```sh
 git clone https://github.com/IsaacWang254/nvim ~/.config/nvim
 ```
+
+### Terminal font
+
+`ghostty/config` selects the font by family name only — nothing in this repo
+installs it, so a fresh machine renders in a fallback face until the font is
+present. The patched build lives in its own repo:
+
+```sh
+git clone https://github.com/IsaacWang254/nk57-monospace-nerd-font
+cp nk57-monospace-nerd-font/fonts/*.otf ~/Library/Fonts/
+```
+
+The base font (NK57 Monospace, by Ray Larabie) is CC0. The repo holds a build
+patched with [Nerd Fonts](https://github.com/ryanoasis/nerd-fonts) glyphs plus
+the script to reproduce it.
 
 ---
 
