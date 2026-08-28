@@ -1,6 +1,17 @@
 # Interactive fish configuration converted from ~/.zshrc.
 
 # Environment
+# Homebrew first: everything below (zoxide/direnv init, the eza/bat aliases)
+# probes for binaries in /opt/homebrew/bin, so PATH has to be set before them.
+# Apple Silicon prefix; Intel Macs use /usr/local.
+for __brew in /opt/homebrew/bin/brew /usr/local/bin/brew
+    if test -x $__brew
+        $__brew shellenv fish | source
+        break
+    end
+end
+set -e __brew
+
 set -gx PATH $HOME/.local/bin $PATH
 set -gx EDITOR nvim
 set -gx VISUAL nvim
