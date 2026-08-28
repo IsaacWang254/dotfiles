@@ -1,3 +1,27 @@
 [user]
-	name = Isaac Wang
-	email = iwang@trumidtech.com
+	name = Isaac_Wang
+	email = isaac.ck.wang@gmail.com
+	signingkey = BE0DB2AF95434D08
+
+[commit]
+	gpgsign = true
+
+[gpg]
+	# Homebrew's gpg; GPG Suite installs to /usr/local/MacGPG2/bin/gpg instead.
+	program = /opt/homebrew/bin/gpg
+
+[core]
+	editor = nvim
+
+[push]
+	default = simple
+
+[merge]
+	ff = only
+	tool = code
+
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
