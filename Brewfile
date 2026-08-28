@@ -7,6 +7,8 @@ brew "ast-grep"
 # Clone of cat(1) with syntax highlighting and Git integration
 brew "bat"
 # Container runtimes on MacOS (and Linux) with minimal setup
+# Shell history replacement with sync and fuzzy search
+brew "atuin"
 brew "colima", restart_service: :changed
 # Load/unload environment variables based on $PWD
 brew "direnv"
@@ -22,6 +24,8 @@ brew "fisher"
 brew "fzf"
 # GitHub command-line tool
 brew "gh"
+# Git extension for versioning large files
+brew "git-lfs"
 # Distributed revision control system
 brew "git"
 # Agent multiplexer that lives in your terminal
