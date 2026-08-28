@@ -10,6 +10,11 @@ Personal config, portable across machines.
 | **Karabiner-Elements** key remap (macOS) | [`karabiner/`](karabiner/) | CapsLock → Esc on tap, Control on hold |
 | **AeroSpace** tiling WM (macOS) | [`aerospace/`](aerospace/) | Keyboard-driven tiling via [AeroSpace](https://github.com/nikitabobko/AeroSpace) |
 | **Ghostty** terminal | [`ghostty/`](ghostty/) | NK57 Monospace + native auto light/dark theme |
+| **Homebrew** packages | [`Brewfile`](Brewfile) | Taps, formulae, casks, editor extensions, global npm packages |
+| **atuin** shell history | [`atuin/`](atuin/) | Daemon + sync-records + `enter_accept`; key and history DB are *not* tracked |
+| **mise** runtime manager | [`mise/`](mise/) | Global tool pins (node) |
+| **git** | [`git/`](git/) | Identity + global ignore |
+| **gh** CLI | [`gh/`](gh/) | Prefs and aliases; `hosts.yml` (auth) is *not* tracked |
 | **Neovim** | [github.com/IsaacWang254/nvim](https://github.com/IsaacWang254/nvim) | Lives in its own repo — clone into `~/.config/nvim` |
 | **Terminal font** | [github.com/IsaacWang254/nk57-monospace-nerd-font](https://github.com/IsaacWang254/nk57-monospace-nerd-font) | Patched build of the font `ghostty/config` asks for — own repo |
 
@@ -193,3 +198,96 @@ repo — the function is inert until that script exists on the machine.
 The `updateTiobiDev` / `tiobiLocalServer` / `tiobiLocal` / `fuck` functions
 delegate to a zsh subprocess because they are defined in work-specific
 zsh files (`~/.tiobi-local.zsh`) that are not part of this repo.
+
+---
+
+## CLI tooling
+
+Symlinked by `install.sh` alongside fish:
+
+| Repo file | Installed to | What |
+|-----------|--------------|------|
+| `atuin/config.toml` | `~/.config/atuin/config.toml` | `enter_accept`, `daemon-fuzzy` search, daemon + autostart, sync records, AI |
+| `mise/config.toml` | `~/.config/mise/config.toml` | Global tool pins — currently `node = "25"` |
+| `git/gitconfig` | `~/.gitconfig` | `user.name` / `user.email` |
+| `git/ignore` | `~/.config/git/ignore` | Global gitignore (XDG default path — needs no `core.excludesFile`) |
+| `gh/config.yml` | `~/.config/gh/config.yml` | `git_protocol`, prompts, the `co = pr checkout` alias |
+
+atuin, git and gh all rewrite their config file when you change a setting from
+the CLI, but all three write **through** a symlink onto the resolved path, so
+the repo copy stays the source of truth and your edits land in git. (Karabiner
+is the one exception in this repo — it replaces the file, so it is copied.)
+
+### Not tracked, on purpose
+
+These are credentials or machine state, not config, and this repo is public:
+
+| Path | Why |
+|------|-----|
+| `~/.local/share/atuin/key` | Sync **encryption key**. Losing it loses your synced history; publishing it hands it over. Back it up somewhere private, not here. |
+| `~/.local/share/atuin/*.db` | Shell history itself. |
+| `~/.config/gh/hosts.yml` | gh account + auth. Re-create with `gh auth login`. |
+| `~/.aws/`, `~/.ssh/` | Credentials. |
+| `~/.zsh_history` | History. |
+
+### Tools with no config file
+
+`zoxide` (the `cd` → `z` alias), `fzf`, `direnv`, `eza`, `bat` and `thefuck`
+are driven entirely from `fish/config.fish` — init hooks and aliases, no config
+file of their own. `install.sh` only checks they are installed:
+
+```sh
+brew install zoxide fzf direnv eza bat neovim thefuck
+```
+
+### The zsh config is not here
+
+`~/.zshrc` is deliberately absent. `fish/config.fish` still depends on it —
+`updateTiobiDev`, `tiobiLocalServer`, `tiobiLocal` and `fuck` shell out to
+`zsh -ic`, which sources `~/.zshrc` and `~/.tiobi-local.zsh`. Those files
+contain work-specific tooling (internal paths, package names and ports), and
+this repository is public, so they stay out of it.
+
+Consequence: on a fresh machine those four fish functions exist but fail. Every
+other alias and hook in `config.fish` works standalone.
+
+---
+
+## Homebrew
+
+`Brewfile` is a `brew bundle dump` of this machine — 4 taps, 50 formulae,
+7 casks, the Cursor/VS Code extension list, and global npm packages.
+
+```sh
+brew bundle install --file=~/dotfiles/Brewfile     # install everything
+brew bundle check   --file=~/dotfiles/Brewfile     # what is missing?
+brew bundle dump --file=~/dotfiles/Brewfile --force  # re-capture after installing something
+```
+
+`install.sh` only *reports* what is missing by default, because installing 50+
+packages should be deliberate. To let it install:
+
+```sh
+DOTFILES_INSTALL_PACKAGES=1 ~/dotfiles/install.sh
+```
+
+### Not covered by the Brewfile
+
+Installed outside Homebrew, so `brew bundle` will not restore them:
+
+| Tool | Install |
+|------|---------|
+| **Karabiner-Elements** | Installed manually, *not* via brew — the app is in `/Applications` but absent from `brew list --cask`. Deliberately left out of the Brewfile: adding it would make `brew bundle install` collide with the existing app and fail the whole run. Install by hand, or `brew install --cask karabiner-elements` on a clean machine. |
+| **atuin** | `curl --proto '=https' --tlsv1.2 -LsSf https://setup.atuin.sh \| sh` — lives in `~/.atuin/bin` |
+| **bun** | `curl -fsSL https://bun.sh/install \| bash` — `~/.bun` |
+| **uv** | `curl -LsSf https://astral.sh/uv/install.sh \| sh` — `~/.local/bin` |
+| **Claude Code** | `~/.local/bin/claude` |
+| **cursor-agent** | `~/.local/bin/cursor-agent` |
+| **node** | Managed by **mise** (`mise/config.toml` pins `node = "25"`), not brew. `nvm` is also present but only lazy-loaded from the zsh config. |
+
+### Stale entry
+
+`Brewfile` still lists `brew "kanata"`, because it is still installed on this
+machine — but this repo replaced kanata with Karabiner. It is kept so the
+Brewfile stays a truthful dump; `brew uninstall kanata` and re-dump when you
+are ready to drop it.
