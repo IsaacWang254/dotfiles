@@ -61,6 +61,44 @@ else
   aerospace reload-config 2>/dev/null || true
 fi
 
+# ---------------------------------------------------------------------------
+# fish (shell)
+# ---------------------------------------------------------------------------
+# Only the hand-written files are symlinked. Everything else under
+# ~/.config/fish is generated or fisher-managed and stays untracked:
+#   functions/{fish_prompt,fish_right_prompt,fish_mode_prompt,fish_title,
+#              fish_greeting,__bobthefish_*,bobthefish_*}.fish  <- fisher plugin
+#   conf.d/atuin.env.fish                                        <- atuin installer
+#   fish_variables                                               <- universal vars
+FISH_CFG_DIR="$HOME/.config/fish"
+
+echo "==> Symlinking fish config -> $FISH_CFG_DIR"
+mkdir -p "$FISH_CFG_DIR/conf.d" "$FISH_CFG_DIR/functions"
+ln -sf "$DOTFILES/fish/config.fish"                "$FISH_CFG_DIR/config.fish"
+ln -sf "$DOTFILES/fish/fish_plugins"               "$FISH_CFG_DIR/fish_plugins"
+ln -sf "$DOTFILES/fish/conf.d/dracula-theme.fish"  "$FISH_CFG_DIR/conf.d/dracula-theme.fish"
+ln -sf "$DOTFILES/fish/functions/wt.fish"          "$FISH_CFG_DIR/functions/wt.fish"
+
+if ! command -v fish >/dev/null 2>&1; then
+  echo "   note: fish not installed. Install with:  brew install fish"
+  echo "         then re-run this script to bootstrap fisher plugins."
+else
+  # fisher + the plugins listed in fish_plugins (theme-bobthefish).
+  if ! fish -c 'functions -q fisher' 2>/dev/null; then
+    echo "==> Bootstrapping fisher"
+    fish -c 'curl -sL https://raw.githubusercontent.com/jorgebucaran/fisher/main/functions/fisher.fish | source && fisher install jorgebucaran/fisher'
+  fi
+  echo "==> Installing fish plugins from fish_plugins"
+  fish -c 'fisher update'
+
+  # Make fish the login shell (needs the path registered in /etc/shells).
+  FISH_BIN="$(command -v fish)"
+  if [[ "${SHELL:-}" != "$FISH_BIN" ]]; then
+    echo "   note: fish is not your login shell. To switch:"
+    echo "         echo $FISH_BIN | sudo tee -a /etc/shells && chsh -s $FISH_BIN"
+  fi
+fi
+
 echo
 echo "==> Done."
 echo
