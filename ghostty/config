@@ -19,7 +19,6 @@ adjust-cell-height = 20%
 adjust-cell-width = 0
 
 # --- Colours ------------------------------------------------------------
-theme = light:Github Light Default, dark:Github Dark
 unfocused-split-opacity = 1
 
 # --- Cursor -------------------------------------------------------------

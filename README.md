@@ -10,7 +10,7 @@ Personal config, portable across machines.
 | **Karabiner-Elements** key remap (macOS) | [`karabiner/`](karabiner/) | CapsLock → Esc on tap, Control on hold |
 | **AeroSpace** tiling WM (macOS) | [`aerospace/`](aerospace/) | Keyboard-driven tiling via [AeroSpace](https://github.com/nikitabobko/AeroSpace) |
 | **Corne** keyboard keymap | [`corne/`](corne/) | 42-key split on a 2.4GHz dongle; keymap written over raw HID, not flashed |
-| **Ghostty** terminal | [`ghostty/`](ghostty/) | NK57 Monospace + native auto light/dark theme |
+| **Ghostty** terminal | [`ghostty/`](ghostty/) | NK57 Monospace; appearance left to Ghostty's own default |
 | **Homebrew** packages | [`Brewfile`](Brewfile) | Taps, formulae, casks, editor extensions, global npm packages |
 | **atuin** shell history | [`atuin/`](atuin/) | Daemon + sync-records + `enter_accept`; key and history DB are *not* tracked |
 | **mise** runtime manager | [`mise/`](mise/) | Global tool pins (node) |
@@ -162,6 +162,19 @@ python3 corne/apply.py --read b.bin   # dump what's on the dongle right now
 
 `corne/keymap.layout.json` is the same keymap in VIA's export format, for
 <https://vial.rocks> if you'd rather edit it in a GUI.
+
+The firmware's QMK settings are separate from the keymap — `apply.py` does not
+touch them and `keymap.bin` does not capture them — so the ones worth pinning
+live in `corne/settings.json`:
+
+```sh
+python3 corne/settings.py            # show current values, flag drift
+python3 corne/settings.py --apply    # write settings.json to the dongle
+```
+
+Auto Shift is the one to know about. It shipped **on**, which makes a held key
+type its shifted character instead of repeating — a symptom nothing in the
+keymap explains. It is off now, and tracked so it stays off.
 
 Layout is adapted from [charlietlamb/corne-config](https://github.com/charlietlamb/corne-config):
 QWERTY, `Tab`/`Ctrl`/`Shift` down the outer column, and two layers behind the
