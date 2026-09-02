@@ -94,6 +94,21 @@ else
 fi
 
 # ---------------------------------------------------------------------------
+# Corne keyboard (w-corne-choc, 2.4GHz dongle)
+# ---------------------------------------------------------------------------
+# Nothing to symlink: the keymap lives on the dongle's flash, not in a file on
+# this machine. Deliberately NOT applied automatically — every other step here
+# is idempotent file placement, and silently rewriting a keyboard on each run
+# would be a surprise. This only reports; see corne/README.md.
+echo "==> Checking Corne dongle"
+if ioreg -p IOUSB -w0 -l 2>/dev/null | grep -q "w-corne-choc"; then
+  echo "   dongle connected. To write the tracked keymap:"
+  echo "     python3 $DOTFILES/corne/apply.py"
+else
+  echo "   dongle not connected (nothing to do)"
+fi
+
+# ---------------------------------------------------------------------------
 # fish (shell)
 # ---------------------------------------------------------------------------
 # Only the hand-written files are symlinked. Everything else under
@@ -195,3 +210,4 @@ echo "Manual steps this script does NOT do:"
 echo "  - Karabiner-Elements: grant Input Monitoring (System Settings > Privacy"
 echo "    & Security) the first time it runs."
 echo "  - AeroSpace: grant Accessibility, and quit Rectangle/Magnet if running."
+echo "  - Corne: the keymap is not applied by this script. See corne/README.md."

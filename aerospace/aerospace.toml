@@ -1,9 +1,18 @@
 # AeroSpace config — keyboard-driven tiling for macOS.
 # https://nikitabobko.github.io/AeroSpace/guide
 #
-# Modifier is Option (alt). Either Option key works — the home-row mods this
-# note used to warn about are long gone, and the only remap in this repo now
-# is CapsLock (see karabiner/), which does not touch Option.
+# Modifier is Option (alt). Either Option key works.
+#
+# These bindings are shaped around the Corne (see ../corne/README.md), whose
+# base layer has Ctrl, Shift and Cmd but reaches Alt only through the right
+# thumb's hold, and keeps the digits on layer 1 behind the left thumb. So
+# `alt-1` would mean pinning both thumbs and reaching the top row — the worst
+# chord on the board for the most-used action in a tiling WM.
+#
+# Workspaces are therefore named and keyed by PURPOSE, on base-layer letters:
+# one thumb plus one key. They work identically on the laptop keyboard.
+#
+#   E editor   T terminal   B browser   N notes   C chat   M media
 
 # Start AeroSpace at login.
 start-at-login = true
@@ -31,11 +40,77 @@ outer.top        = 8
 outer.right      = 8
 
 # ---------------------------------------------------------------------------
+# Send apps to their workspace on launch
+# ---------------------------------------------------------------------------
+# Bundle ids read from each app's Info.plist. An app not listed here just opens
+# wherever you are, which is the right default for one-offs like Preview.
+
+[[on-window-detected]]           # Cursor
+if.app-id = 'com.todesktop.230313mzl4w4u92'
+run = 'move-node-to-workspace E'
+
+[[on-window-detected]]
+if.app-id = 'com.microsoft.VSCode'
+run = 'move-node-to-workspace E'
+
+[[on-window-detected]]
+if.app-id = 'dev.zed.Zed'
+run = 'move-node-to-workspace E'
+
+[[on-window-detected]]
+if.app-id = 'com.jetbrains.intellij'
+run = 'move-node-to-workspace E'
+
+[[on-window-detected]]
+if.app-id = 'com.apple.dt.Xcode'
+run = 'move-node-to-workspace E'
+
+[[on-window-detected]]
+if.app-id = 'com.mitchellh.ghostty'
+run = 'move-node-to-workspace T'
+
+[[on-window-detected]]
+if.app-id = 'com.google.Chrome'
+run = 'move-node-to-workspace B'
+
+[[on-window-detected]]
+if.app-id = 'com.apple.Safari'
+run = 'move-node-to-workspace B'
+
+[[on-window-detected]]
+if.app-id = 'md.obsidian'
+run = 'move-node-to-workspace N'
+
+[[on-window-detected]]
+if.app-id = 'com.tinyspeck.slackmacgap'
+run = 'move-node-to-workspace C'
+
+[[on-window-detected]]
+if.app-id = 'com.hnc.Discord'
+run = 'move-node-to-workspace C'
+
+[[on-window-detected]]
+if.app-id = 'com.apple.MobileSMS'
+run = 'move-node-to-workspace C'
+
+[[on-window-detected]]
+if.app-id = 'com.apple.mail'
+run = 'move-node-to-workspace C'
+
+[[on-window-detected]]
+if.app-id = 'notion.mail.id'
+run = 'move-node-to-workspace C'
+
+[[on-window-detected]]
+if.app-id = 'com.spotify.client'
+run = 'move-node-to-workspace M'
+
+# ---------------------------------------------------------------------------
 # Main mode
 # ---------------------------------------------------------------------------
 [mode.main.binding]
 
-# Focus (vim hjkl) — use LEFT Option (see note above)
+# Focus (vim hjkl)
 alt-h = 'focus left'
 alt-j = 'focus down'
 alt-k = 'focus up'
@@ -47,10 +122,10 @@ alt-shift-j = 'move down'
 alt-shift-k = 'move up'
 alt-shift-l = 'move right'
 
-# Resize
-alt-minus = 'resize smart -50'
-alt-equal = 'resize smart +50'
-alt-shift-equal = 'balance-sizes'
+# Resize — on the outer column, since minus/equal live on Corne layer 1
+alt-semicolon = 'resize smart -50'
+alt-quote     = 'resize smart +50'
+alt-shift-quote = 'balance-sizes'
 
 # Layout toggles
 alt-slash = 'layout tiles horizontal vertical'   # switch tiling orientation
@@ -59,33 +134,24 @@ alt-f     = 'fullscreen'
 alt-shift-space = 'layout floating tiling'        # float / unfloat the window
 
 # Workspaces (switch)
-alt-1 = 'workspace 1'
-alt-2 = 'workspace 2'
-alt-3 = 'workspace 3'
-alt-4 = 'workspace 4'
-alt-5 = 'workspace 5'
-alt-6 = 'workspace 6'
-alt-7 = 'workspace 7'
-alt-8 = 'workspace 8'
-alt-9 = 'workspace 9'
+alt-e = 'workspace E'    # editor
+alt-t = 'workspace T'    # terminal
+alt-b = 'workspace B'    # browser
+alt-n = 'workspace N'    # notes
+alt-c = 'workspace C'    # chat
+alt-m = 'workspace M'    # media
 
 # Send window to workspace (and follow it)
-alt-shift-1 = ['move-node-to-workspace 1', 'workspace 1']
-alt-shift-2 = ['move-node-to-workspace 2', 'workspace 2']
-alt-shift-3 = ['move-node-to-workspace 3', 'workspace 3']
-alt-shift-4 = ['move-node-to-workspace 4', 'workspace 4']
-alt-shift-5 = ['move-node-to-workspace 5', 'workspace 5']
-alt-shift-6 = ['move-node-to-workspace 6', 'workspace 6']
-alt-shift-7 = ['move-node-to-workspace 7', 'workspace 7']
-alt-shift-8 = ['move-node-to-workspace 8', 'workspace 8']
-alt-shift-9 = ['move-node-to-workspace 9', 'workspace 9']
+alt-shift-e = ['move-node-to-workspace E', 'workspace E']
+alt-shift-t = ['move-node-to-workspace T', 'workspace T']
+alt-shift-b = ['move-node-to-workspace B', 'workspace B']
+alt-shift-n = ['move-node-to-workspace N', 'workspace N']
+alt-shift-c = ['move-node-to-workspace C', 'workspace C']
+alt-shift-m = ['move-node-to-workspace M', 'workspace M']
 
 # Jump back to the previous workspace / bounce a window between monitors
 alt-tab = 'workspace-back-and-forth'
 alt-shift-tab = 'move-workspace-to-monitor --wrap-around next'
-
-# Reload this file
-alt-shift-c = 'reload-config'
 
 # Enter service mode for the less-common stuff
 alt-shift-semicolon = 'mode service'
@@ -96,6 +162,7 @@ alt-shift-semicolon = 'mode service'
 [mode.service.binding]
 esc = ['reload-config', 'mode main']
 r = ['flatten-workspace-tree', 'mode main']       # reset window tree
+c = ['reload-config', 'mode main']                # was alt-shift-c in main
 backspace = ['close-all-windows-but-current', 'mode main']
 
 # Join the focused window into a neighbor's container
