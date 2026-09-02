@@ -73,19 +73,31 @@ python3 apply.py backup.bin     # ...and to put it back
 `keymap.bin` is the exact 1120-byte dynamic keymap buffer read off the device;
 `keymap.layout.json` is the same thing as keycode names.
 
-## Tap-hold settings
+## Firmware settings
 
-These live in the firmware's QMK settings, not the keymap, and `apply.py` does
-not touch them. Current values, readable and writable over the same raw HID
-interface (Vial exposes 21 settings here):
+These live in the firmware's QMK settings store, not the keymap. `apply.py` does
+not touch them and `keymap.bin` does not capture them, so the ones worth pinning
+are tracked in `settings.json` and managed separately:
 
-| Setting | Value |
-|---|---|
-| Tapping Term | 200 ms |
-| Permissive Hold / Ignore Mod Tap Interrupt / Tapping Force Hold / Retro Tapping | all off |
-| Combo term | 50 ms |
+```sh
+python3 settings.py            # show current values, flag drift from settings.json
+python3 settings.py --apply    # write settings.json back to the dongle
+```
 
-If home-row mods ever go on this board, those are the knobs to turn — no reflash
+| qsid | Setting | Value |
+|---|---|---|
+| 3 | Auto Shift | **off** |
+| 4 | Auto Shift timeout | 175 ms |
+| 7 | Tapping Term | 200 ms |
+| 8 | Permissive Hold / Ignore Mod Tap Interrupt / Tapping Force Hold / Retro Tapping | all off |
+
+**Auto Shift shipped enabled**, which is worth knowing because the symptom is
+baffling: hold any key and instead of repeating, it types the *shifted*
+character after 175 ms. No held key ever repeats. It is a firmware setting, not
+a keymap problem, so nothing in the keymap explains it. It is now off.
+
+Vial exposes 21 settings here in total, including mouse-key tuning. If home-row
+mods ever go on this board, qsid 7 and 8 are the knobs to turn — no reflash
 needed.
 
 ## Gotchas
