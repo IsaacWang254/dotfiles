@@ -9,6 +9,7 @@ Personal config, portable across machines.
 | **fish** shell | [`fish/`](fish/) | Aliases, adaptive Dracula/Alucard theme, bobthefish prompt via [fisher](https://github.com/jorgebucaran/fisher) |
 | **Karabiner-Elements** key remap (macOS) | [`karabiner/`](karabiner/) | CapsLock → Esc on tap, Control on hold |
 | **AeroSpace** tiling WM (macOS) | [`aerospace/`](aerospace/) | Keyboard-driven tiling via [AeroSpace](https://github.com/nikitabobko/AeroSpace) |
+| **Corne** keyboard keymap | [`corne/`](corne/) | 42-key split on a 2.4GHz dongle; keymap written over raw HID, not flashed |
 | **Ghostty** terminal | [`ghostty/`](ghostty/) | NK57 Monospace + native auto light/dark theme |
 | **Homebrew** packages | [`Brewfile`](Brewfile) | Taps, formulae, casks, editor extensions, global npm packages |
 | **atuin** shell history | [`atuin/`](atuin/) | Daemon + sync-records + `enter_accept`; key and history DB are *not* tracked |
@@ -102,20 +103,30 @@ Keyboard-driven i3-style tiling. No SIP disabling required. Modifier is **Option
 
 ### Keybindings
 
+Workspaces are named by purpose rather than numbered, and every binding sits on
+the Corne's base layer — one thumb plus one key. See [`corne/`](corne/) for why:
+that keyboard reaches Alt only through the right thumb's hold and keeps its
+digits a layer down, so `alt-1` would pin both thumbs.
+
 | Keys | Action |
 |------|--------|
 | `alt` + `h/j/k/l` | Focus window left/down/up/right |
 | `alt-shift` + `h/j/k/l` | Move window |
-| `alt` + `1`–`9` | Switch to workspace |
-| `alt-shift` + `1`–`9` | Send window to workspace (and follow) |
+| `alt` + `e/t/b/n/c/m` | Switch to workspace **E**ditor / **T**erminal / **B**rowser / **N**otes / **C**hat / **M**edia |
+| `alt-shift` + `e/t/b/n/c/m` | Send window to that workspace (and follow) |
 | `alt-tab` | Previous workspace |
-| `alt` + `-` / `=` | Resize smaller / larger |
+| `alt-shift-tab` | Move workspace to the next monitor |
+| `alt-;` / `alt-'` | Resize smaller / larger |
+| `alt-shift-'` | Balance sizes |
 | `alt-/` | Toggle tiling orientation |
 | `alt-,` | Accordion layout |
 | `alt-f` | Fullscreen |
 | `alt-shift-space` | Float / unfloat window |
-| `alt-shift-c` | Reload config |
-| `alt-shift-;` | Enter *service* mode (then `esc` back; `r` reset tree, `backspace` close others, `alt-shift-hjkl` join) |
+| `alt-shift-;` | Enter *service* mode (then `esc` back; `c` reload config, `r` reset tree, `backspace` close others, `alt-shift-hjkl` join) |
+
+Apps are sent to their workspace on launch by the `on-window-detected` rules at
+the top of the config — editors to `E`, Ghostty to `T`, browsers to `B`, and so
+on. Anything not listed opens where you are.
 
 ### Setup
 
@@ -133,6 +144,32 @@ brew install --cask nikitabobko/tap/aerospace
 Edit `aerospace/aerospace.toml`, then `alt-shift-c` (or `aerospace reload-config`) to apply.
 
 ---
+
+## Corne keyboard
+
+42-key split (3x6 + 3 thumbs) on a 2.4GHz dongle — a Keyclicks w-corne-choc
+running a QMK/Vial vendor fork. The **dongle** holds the firmware and keymap;
+the halves just report matrix events, and their USB-C ports are charge-only.
+
+So there is nothing to flash and nothing to symlink. The keymap is written to
+the dongle over Vial's raw HID interface, and `install.sh` only reports whether
+the dongle is plugged in:
+
+```sh
+python3 corne/apply.py            # write the tracked keymap, verify by read-back
+python3 corne/apply.py --read b.bin   # dump what's on the dongle right now
+```
+
+`corne/keymap.layout.json` is the same keymap in VIA's export format, for
+<https://vial.rocks> if you'd rather edit it in a GUI.
+
+Layout is adapted from [charlietlamb/corne-config](https://github.com/charlietlamb/corne-config):
+QWERTY, `Tab`/`Ctrl`/`Shift` down the outer column, and two layers behind the
+thumbs — symbols and digits on `MO(1)`, function keys and arrows on `MO(2)`.
+Full layer diagrams and the device's raw-HID details are in
+[`corne/README.md`](corne/README.md).
+
+The AeroSpace bindings above are shaped around this keyboard.
 
 ## fish (shell)
 

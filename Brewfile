@@ -30,6 +30,7 @@ brew "git-lfs"
 brew "git"
 # Agent multiplexer that lives in your terminal
 brew "herdr"
+brew "hidapi"
 # Review-first terminal diff viewer for agent-authored changesets
 brew "hunk"
 # Cross-platform software keyboard remapper for Linux, macOS and Windows
