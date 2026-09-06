@@ -234,7 +234,7 @@ pinned.
 
 | Surface | Where the palette comes from |
 |---------|------------------------------|
-| Ghostty | `theme = catppuccin-mocha` — built in, `ghostty +list-themes` |
+| Ghostty | `theme = Catppuccin Mocha` — built in, `ghostty +list-themes` |
 | fish syntax + pager | `fish/conf.d/catppuccin-theme.fish` |
 | bobthefish prompt | `set -g theme_color_scheme catppuccin-mocha` — built into bobthefish |
 | bat | `bat/config` — Catppuccin ships with bat 0.26 |

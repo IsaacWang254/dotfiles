@@ -26,7 +26,7 @@ adjust-cell-width = 0
 # this terminal -- fish, nvim, bat, eza, atuin -- is Mocha-only and paints
 # onto whatever background the terminal provides. A light terminal would put
 # Mocha's light-on-dark text on a light ground.
-theme = catppuccin-mocha
+theme = Catppuccin Mocha
 unfocused-split-opacity = 1
 
 # --- Cursor -------------------------------------------------------------
