@@ -37,13 +37,21 @@ Layer 0
 Layer 1 (hold MO1, left thumb)      Layer 2 (hold MO2, right thumb)
  Tab   ! @ # $ %  ‖ ^ & * ( )  BSpc  F1..F6        ‖ F7..F12
  Ctrl  1 2 3 4 5  ‖ ` - = { }  \     Media/Volume  ‖ <- v ^ ->  \  `
- Shift 6 7 8 9 0  ‖ ~ _ + [ ]  |     RGB/prev-next ‖ _ + { } |  RAlt
+ Shift 6 7 8 9 0  ‖ ~ _ + [ ]  |     Shft F18 ‹ › F16 F17 ‖ _ + { } |  RAlt
 ```
 
 `Esc*` is `MT(MOD_RALT, KC_ESC)` — tap for Escape, hold for Right Alt. It is the
 only Alt on the base layer, which is why the AeroSpace bindings in this repo use
 `alt` plus a base-layer *letter* rather than a number (digits live on layer 1, so
 `alt-1` would need both thumbs). See `../aerospace/aerospace.toml`.
+
+`F16`/`F17`/`F18` on layer 2's bottom row are capture keys for Shottr. macOS
+binds nothing to F13-F24, so they cannot collide with an app or with AeroSpace:
+F16 = region, F17 = scrolling capture, F18 = OCR text grab. Set the matching
+hotkeys in Shottr's preferences; nothing here depends on them existing.
+
+The layer-2 left pinky was `QK_UNDERGLOW_TOGGLE` (dead - this board has no RGB)
+and is now `Shift`, so Shift-arrow selection works while layer 2 is held.
 
 Layer 3 is the tri-layer (hold both MO1 and MO2) and carries `QK_BOOT` plus RGB
 controls. This board has no RGB, and the firmware probably has no tri-layer, so

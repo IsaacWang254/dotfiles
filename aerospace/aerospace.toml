@@ -130,7 +130,8 @@ alt-shift-quote = 'balance-sizes'
 # Layout toggles
 alt-slash = 'layout tiles horizontal vertical'   # switch tiling orientation
 alt-comma = 'layout accordion horizontal vertical'
-alt-f     = 'fullscreen'
+alt-f     = 'fullscreen'                        # fullscreen, gaps kept
+alt-enter = 'fullscreen --no-outer-gaps'        # edge-to-edge, gaps ignored
 alt-shift-space = 'layout floating tiling'        # float / unfloat the window
 
 # Workspaces (switch)
