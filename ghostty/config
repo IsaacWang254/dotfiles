@@ -27,7 +27,13 @@ cursor-style-blink = true
 
 # --- Window -------------------------------------------------------------
 window-theme = auto
-macos-titlebar-style = tabs
+
+# No titlebar and no traffic lights: AeroSpace tiles these windows and is driven
+# from the keyboard, so the close/minimise/zoom buttons are dead weight and the
+# titlebar is a row of pixels lost from every window. Was 'tabs', which only
+# styled the native tab bar this setup no longer uses (see super+t below).
+# Takes effect for NEW windows; already-open ones keep their titlebar.
+macos-titlebar-style = hidden
 macos-option-as-alt = true
 scrollbar = system
 scrollback-limit = 15000000
@@ -51,6 +57,12 @@ shell-integration-features = ssh-env,ssh-terminfo
 confirm-close-surface = true
 
 # --- Keybinds -----------------------------------------------------------
+# cmd-T makes a real WINDOW, not a macOS tab. AeroSpace cannot distinguish a
+# native tab from a window, so each tab claimed its own tile while all tabs
+# shared one visual window — the layout got squeezed by phantom tiles.
+# AeroSpace is the multiplexer now; let it tile real windows.
+keybind = super+t=new_window
+
 keybind = global:super+backslash=toggle_quick_terminal
 keybind = super+e=toggle_command_palette
 keybind = shift+enter=text:\n
