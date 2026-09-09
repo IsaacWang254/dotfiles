@@ -94,6 +94,33 @@ else
 fi
 
 # ---------------------------------------------------------------------------
+# macOS window tabbing
+# ---------------------------------------------------------------------------
+# AeroSpace cannot tell a native macOS tab from a window: the Accessibility API
+# exposes every tab as its own AXWindow. A Finder window with three tabs
+# therefore claims FOUR tiles while occupying one, and the layout collapses.
+#
+# 'manual' stops macOS folding new windows into tabs. The macOS default,
+# 'always' (System Settings > Desktop & Dock > "Prefer tabs when opening
+# documents"), forces tabbing even when an app explicitly asks for a real
+# window — so rebinding cmd-T in ghostty/config is not enough on its own; the
+# two only work as a pair.
+#
+# This is the one place this script changes a system preference rather than
+# just placing a file. It is here because the AeroSpace config above misbehaves
+# without it. It is one line and reversible:
+#   defaults write -g AppleWindowTabbingMode always
+echo "==> Setting macOS window tabbing to 'manual'"
+current_tabbing="$(defaults read -g AppleWindowTabbingMode 2>/dev/null || echo unset)"
+if [[ "$current_tabbing" == "manual" ]]; then
+  echo "   already 'manual'"
+else
+  defaults write -g AppleWindowTabbingMode manual
+  echo "   was '$current_tabbing' -> 'manual'"
+  echo "   note: already-running apps keep tabbing until they are relaunched."
+fi
+
+# ---------------------------------------------------------------------------
 # Corne keyboard (w-corne-choc, 2.4GHz dongle)
 # ---------------------------------------------------------------------------
 # Nothing to symlink: the keymap lives on the dongle's flash, not in a file on

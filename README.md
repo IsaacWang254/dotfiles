@@ -113,7 +113,8 @@ digits a layer down, so `alt-1` would pin both thumbs.
 | `alt` + `h/j/k/l` | Focus window left/down/up/right |
 | `alt-shift` + `h/j/k/l` | Move window |
 | `alt` + `e/t/b/n/c/m` | Switch to workspace **E**ditor / **T**erminal / **B**rowser / **N**otes / **C**hat / **M**edia |
-| `alt-shift` + `e/t/b/n/c/m` | Send window to that workspace (and follow) |
+| `alt-s` | Switch to workspace **S**ide — pinned to the built-in display |
+| `alt-shift` + `e/t/b/n/c/m/s` | Send window to that workspace (and follow) |
 | `alt-tab` | Previous workspace |
 | `alt-shift-tab` | Move workspace to the next monitor |
 | `alt-;` / `alt-'` | Resize smaller / larger |
@@ -124,9 +125,43 @@ digits a layer down, so `alt-1` would pin both thumbs.
 | `alt-shift-space` | Float / unfloat window |
 | `alt-shift-;` | Enter *service* mode (then `esc` back; `c` reload config, `r` reset tree, `backspace` close others, `alt-shift-hjkl` join) |
 
-Apps are sent to their workspace on launch by the `on-window-detected` rules at
-the top of the config — editors to `E`, Ghostty to `T`, browsers to `B`, and so
-on. Anything not listed opens where you are.
+Apps are sorted into their workspace by the `on-window-detected` rules at the
+top of the config — editors to `E`, Ghostty to `T`, browsers to `B`, and so on.
+Anything not listed opens where you are.
+
+Those rules are guarded with `during-aerospace-startup`, so they run once when
+AeroSpace launches and lay out whatever is already open. Without the guard they
+fire on *every* new window — the callback is not once-per-app — so opening a
+terminal from the editor workspace yanked the whole screen to `T`. Preview is
+the deliberate exception: it is opened on demand rather than left running, so a
+startup-only rule would never fire, and PDFs always belong beside the editor.
+
+### Workspaces and monitors
+
+`workspace-to-monitor-force-assignment` pins `E/T/B/N/C/M` to the external
+display and `S` to the built-in one. Without it all six piled onto the external
+monitor and the laptop screen was left showing workspace `1`, which has no
+keybinding and so could not be reached at all. If the external monitor is
+unplugged, AeroSpace falls back to the main display and this still behaves.
+
+### Native macOS tabs
+
+AeroSpace cannot distinguish a native macOS tab from a window — the
+Accessibility API reports each tab as its own `AXWindow`. A Finder window with
+three tabs claims four tiles while occupying one, and the layout collapses.
+There is no AeroSpace-side fix, so this repo attacks it from both ends:
+
+- `install.sh` sets `AppleWindowTabbingMode = manual`, which stops macOS
+  folding new windows into tabs. The macOS default, `always`, overrides an
+  app's request for a real window, so this is the half that actually matters.
+- `ghostty/config` binds `super+t=new_window`, so cmd-T opens a window that
+  AeroSpace tiles instead of a tab it miscounts.
+- Finder's tabs cannot be disabled at all, so `aerospace.toml` gives it
+  `layout floating`, putting its phantom tab-windows outside the tiling tree.
+
+Ghostty is deliberately *not* floated: AeroSpace refuses to `move` a floating
+window (`moving floating windows isn't yet supported`) and `fullscreen` is a
+silent no-op on one, which would cost `alt-shift`+direction and `alt-f`.
 
 ### Setup
 
@@ -141,7 +176,8 @@ brew install --cask nikitabobko/tap/aerospace
    "open at login" — running two window managers fights over window placement.
 4. `start-at-login = true` is set, so it comes back on reboot.
 
-Edit `aerospace/aerospace.toml`, then `alt-shift-c` (or `aerospace reload-config`) to apply.
+Edit `aerospace/aerospace.toml`, then `alt-shift-;` followed by `c` (or
+`aerospace reload-config`) to apply.
 
 ---
 

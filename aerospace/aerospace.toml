@@ -13,9 +13,20 @@
 # one thumb plus one key. They work identically on the laptop keyboard.
 #
 #   E editor   T terminal   B browser   N notes   C chat   M media
+#   S side (built-in display)
+
+# Opt in to config-version 2. The one behaviour this changes: persistent
+# workspaces are no longer inferred from the key bindings below, so they are
+# listed explicitly. See the guide's #config-version section.
+config-version = 2
 
 # Start AeroSpace at login.
 start-at-login = true
+
+# Keep the six purpose-workspaces alive even when empty, so alt-e/t/b/n/c/m
+# always land somewhere and monitor assignment stays stable. Under
+# config-version = 1 this was inferred from the bindings; now it is explicit.
+persistent-workspaces = ['E', 'T', 'B', 'N', 'C', 'M', 'S']
 
 # Normalize the tree so layouts stay predictable.
 enable-normalization-flatten-containers = true
@@ -30,6 +41,24 @@ accordion-padding = 30
 # Keep the mouse with the focused window when switching monitors.
 on-focused-monitor-changed = ['move-mouse monitor-lazy-center']
 
+# ---------------------------------------------------------------------------
+# Pin workspaces to monitors
+# ---------------------------------------------------------------------------
+# Without this, all six purpose-workspaces piled onto the LG and the built-in
+# display was left showing workspace '1' — which has no keybinding, so the
+# laptop screen was unreachable dead space. S ("side") now owns the built-in.
+#
+# If the LG is unplugged, AeroSpace falls back to the main monitor, so this
+# still behaves on the laptop alone.
+[workspace-to-monitor-force-assignment]
+E = 'LG ULTRAGEAR'
+T = 'LG ULTRAGEAR'
+B = 'LG ULTRAGEAR'
+N = 'LG ULTRAGEAR'
+C = 'LG ULTRAGEAR'
+M = 'LG ULTRAGEAR'
+S = 'built-in'
+
 # Gaps between windows and screen edges.
 [gaps]
 inner.horizontal = 8
@@ -40,70 +69,108 @@ outer.top        = 8
 outer.right      = 8
 
 # ---------------------------------------------------------------------------
-# Send apps to their workspace on launch
+# Sort apps into their workspace AT AEROSPACE STARTUP
 # ---------------------------------------------------------------------------
 # Bundle ids read from each app's Info.plist. An app not listed here just opens
-# wherever you are, which is the right default for one-offs like Preview.
+# wherever you are.
+#
+# 'during-aerospace-startup' is why these do not yank you around: the callback
+# fires on EVERY new window, not just the first, so an unguarded rule meant
+# that opening a terminal from the editor workspace teleported the whole screen
+# to T. Guarded, these run once when AeroSpace launches to lay out the apps
+# that are already open, and after that a new window stays where you are.
 
 [[on-window-detected]]           # Cursor
 if.app-id = 'com.todesktop.230313mzl4w4u92'
+if.during-aerospace-startup = true
 run = 'move-node-to-workspace E'
 
 [[on-window-detected]]
 if.app-id = 'com.microsoft.VSCode'
+if.during-aerospace-startup = true
 run = 'move-node-to-workspace E'
 
 [[on-window-detected]]
 if.app-id = 'dev.zed.Zed'
+if.during-aerospace-startup = true
 run = 'move-node-to-workspace E'
 
 [[on-window-detected]]
 if.app-id = 'com.jetbrains.intellij'
+if.during-aerospace-startup = true
 run = 'move-node-to-workspace E'
 
 [[on-window-detected]]
 if.app-id = 'com.apple.dt.Xcode'
+if.during-aerospace-startup = true
 run = 'move-node-to-workspace E'
 
 [[on-window-detected]]
 if.app-id = 'com.mitchellh.ghostty'
+if.during-aerospace-startup = true
 run = 'move-node-to-workspace T'
 
 [[on-window-detected]]
 if.app-id = 'com.google.Chrome'
+if.during-aerospace-startup = true
 run = 'move-node-to-workspace B'
 
 [[on-window-detected]]
 if.app-id = 'com.apple.Safari'
+if.during-aerospace-startup = true
 run = 'move-node-to-workspace B'
 
 [[on-window-detected]]
 if.app-id = 'md.obsidian'
+if.during-aerospace-startup = true
 run = 'move-node-to-workspace N'
 
 [[on-window-detected]]
 if.app-id = 'com.tinyspeck.slackmacgap'
+if.during-aerospace-startup = true
 run = 'move-node-to-workspace C'
 
 [[on-window-detected]]
 if.app-id = 'com.hnc.Discord'
+if.during-aerospace-startup = true
 run = 'move-node-to-workspace C'
 
 [[on-window-detected]]
 if.app-id = 'com.apple.MobileSMS'
+if.during-aerospace-startup = true
 run = 'move-node-to-workspace C'
 
 [[on-window-detected]]
 if.app-id = 'com.apple.mail'
+if.during-aerospace-startup = true
 run = 'move-node-to-workspace C'
 
 [[on-window-detected]]
 if.app-id = 'notion.mail.id'
+if.during-aerospace-startup = true
 run = 'move-node-to-workspace C'
 
 [[on-window-detected]]
 if.app-id = 'com.spotify.client'
+if.during-aerospace-startup = true
 run = 'move-node-to-workspace M'
+
+# Preview is opened on demand rather than left running, so a startup-only rule
+# would never fire. Unguarded on purpose: PDFs always belong next to the editor.
+[[on-window-detected]]
+if.app-id = 'com.apple.Preview'
+run = 'move-node-to-workspace E'
+
+# ---------------------------------------------------------------------------
+# Float apps whose macOS tabs confuse the tiler
+# ---------------------------------------------------------------------------
+# macOS exposes every native tab as a separate AXWindow, and AeroSpace cannot
+# tell a tab from a window. A Finder window with 3 tabs therefore claims FOUR
+# tiles, squeezing everything else. Finder tabs cannot be disabled, so float it:
+# the phantom tab-windows then sit outside the tiling tree and disturb nothing.
+[[on-window-detected]]
+if.app-id = 'com.apple.finder'
+run = 'layout floating'
 
 # ---------------------------------------------------------------------------
 # Main mode
@@ -140,6 +207,7 @@ alt-b = 'workspace B'    # browser
 alt-n = 'workspace N'    # notes
 alt-c = 'workspace C'    # chat
 alt-m = 'workspace M'    # media
+alt-s = 'workspace S'    # side — the built-in display
 
 # Send window to workspace (and follow it)
 alt-shift-e = ['move-node-to-workspace E', 'workspace E']
@@ -148,6 +216,7 @@ alt-shift-b = ['move-node-to-workspace B', 'workspace B']
 alt-shift-n = ['move-node-to-workspace N', 'workspace N']
 alt-shift-c = ['move-node-to-workspace C', 'workspace C']
 alt-shift-m = ['move-node-to-workspace M', 'workspace M']
+alt-shift-s = ['move-node-to-workspace S', 'workspace S']
 
 # Jump back to the previous workspace / bounce a window between monitors
 alt-tab = 'workspace-back-and-forth'
