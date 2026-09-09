@@ -27,7 +27,13 @@ cursor-style-blink = true
 
 # --- Window -------------------------------------------------------------
 window-theme = auto
-macos-titlebar-style = tabs
+
+# No titlebar and no traffic lights: AeroSpace tiles these windows and is driven
+# from the keyboard, so the close/minimise/zoom buttons are dead weight and the
+# titlebar is a row of pixels lost from every window. Was 'tabs', which only
+# styled the native tab bar this setup no longer uses (see super+t below).
+# Takes effect for NEW windows; already-open ones keep their titlebar.
+macos-titlebar-style = hidden
 macos-option-as-alt = true
 scrollbar = system
 scrollback-limit = 15000000
