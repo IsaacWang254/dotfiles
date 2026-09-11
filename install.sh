@@ -123,8 +123,27 @@ echo "==> Symlinking fish config -> $FISH_CFG_DIR"
 mkdir -p "$FISH_CFG_DIR/conf.d" "$FISH_CFG_DIR/functions"
 ln -sf "$DOTFILES/fish/config.fish"                "$FISH_CFG_DIR/config.fish"
 ln -sf "$DOTFILES/fish/fish_plugins"               "$FISH_CFG_DIR/fish_plugins"
-ln -sf "$DOTFILES/fish/conf.d/dracula-theme.fish"  "$FISH_CFG_DIR/conf.d/dracula-theme.fish"
+ln -sf "$DOTFILES/fish/conf.d/catppuccin-theme.fish" "$FISH_CFG_DIR/conf.d/catppuccin-theme.fish"
 ln -sf "$DOTFILES/fish/functions/wt.fish"          "$FISH_CFG_DIR/functions/wt.fish"
+
+# The old adaptive Dracula/Alucard theme wrote its palette with `set -U`, so it
+# lives on in the untracked fish_variables file. The new theme uses `set -g`,
+# which shadows those, but leaving them behind means `set -S fish_color_command`
+# reports a stale Dracula value and confuses anyone debugging colours later.
+rm -f "$FISH_CFG_DIR/conf.d/dracula-theme.fish"
+
+# fish_config's web UI writes conf.d/fish_frozen_theme.fish, which sorts after
+# catppuccin-theme.fish and so silently wins. Its own header says to delete it
+# rather than edit it. Removed here so the tracked theme is actually in effect.
+rm -f "$FISH_CFG_DIR/conf.d/fish_frozen_theme.fish"
+if command -v fish >/dev/null 2>&1; then
+  fish -c 'for v in (set --names --universal)
+             switch $v
+               case "fish_color_*" "fish_pager_color_*" dracula_theme_mode __dracula_appearance
+                 set --erase --universal $v
+             end
+           end' 2>/dev/null || true
+fi
 
 if ! command -v fish >/dev/null 2>&1; then
   echo "   note: fish not installed. Install with:  brew install fish"
@@ -166,6 +185,19 @@ ln -sf "$DOTFILES/atuin/config.toml" "$HOME/.config/atuin/config.toml"
 command -v atuin >/dev/null 2>&1 \
   || echo "   note: atuin not installed.  brew install atuin"
 
+echo "==> Symlinking bat config -> ~/.config/bat/config"
+mkdir -p "$HOME/.config/bat"
+ln -sf "$DOTFILES/bat/config" "$HOME/.config/bat/config"
+
+echo "==> Symlinking eza theme -> ~/.config/eza/theme.yml"
+mkdir -p "$HOME/.config/eza"
+ln -sf "$DOTFILES/eza/theme.yml" "$HOME/.config/eza/theme.yml"
+
+echo "==> Symlinking atuin theme -> ~/.config/atuin/themes/"
+mkdir -p "$HOME/.config/atuin/themes"
+ln -sf "$DOTFILES/atuin/themes/catppuccin-mocha.toml" \
+       "$HOME/.config/atuin/themes/catppuccin-mocha.toml"
+
 echo "==> Symlinking mise config -> ~/.config/mise/config.toml"
 mkdir -p "$HOME/.config/mise"
 ln -sf "$DOTFILES/mise/config.toml" "$HOME/.config/mise/config.toml"
@@ -189,8 +221,10 @@ fi
 # ---------------------------------------------------------------------------
 # Shell tools with no config file of their own
 # ---------------------------------------------------------------------------
-# zoxide, fzf, direnv, eza, bat and thefuck are configured entirely from
-# fish/config.fish (init hooks + aliases) and keep no tracked config here.
+# zoxide, direnv and thefuck are configured entirely from fish/config.fish
+# (init hooks + aliases) and keep no tracked config here. eza, bat and fzf now
+# carry Catppuccin palettes -- the first two are symlinked above, fzf's lives
+# in FZF_DEFAULT_OPTS in fish/config.fish.
 # They still have to be installed for those aliases to work:
 # Plain string, not an array: macOS ships bash 3.2, where expanding an empty
 # array under `set -u` is an unbound-variable error.

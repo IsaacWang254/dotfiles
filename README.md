@@ -6,13 +6,14 @@ Personal config, portable across machines.
 
 | What | Where | Notes |
 |------|-------|-------|
-| **fish** shell | [`fish/`](fish/) | Aliases, adaptive Dracula/Alucard theme, bobthefish prompt via [fisher](https://github.com/jorgebucaran/fisher) |
+| **fish** shell | [`fish/`](fish/) | Aliases, Catppuccin Mocha colors, bobthefish prompt via [fisher](https://github.com/jorgebucaran/fisher) |
 | **Karabiner-Elements** key remap (macOS) | [`karabiner/`](karabiner/) | CapsLock → Esc on tap, Control on hold |
 | **AeroSpace** tiling WM (macOS) | [`aerospace/`](aerospace/) | Keyboard-driven tiling via [AeroSpace](https://github.com/nikitabobko/AeroSpace) |
 | **Corne** keyboard keymap | [`corne/`](corne/) | 42-key split on a 2.4GHz dongle; keymap written over raw HID, not flashed |
-| **Ghostty** terminal | [`ghostty/`](ghostty/) | NK57 Monospace; appearance left to Ghostty's own default |
+| **Ghostty** terminal | [`ghostty/`](ghostty/) | NK57 Monospace; Catppuccin Mocha, pinned dark |
 | **Homebrew** packages | [`Brewfile`](Brewfile) | Taps, formulae, casks, editor extensions, global npm packages |
-| **atuin** shell history | [`atuin/`](atuin/) | Daemon + sync-records + `enter_accept`; key and history DB are *not* tracked |
+| **atuin** shell history | [`atuin/`](atuin/) | Daemon + sync-records + `enter_accept` + Catppuccin Mocha theme; key and history DB are *not* tracked |
+| **bat** / **eza** | [`bat/`](bat/), [`eza/`](eza/) | Catppuccin Mocha palettes for the `cat` and `ls` aliases |
 | **mise** runtime manager | [`mise/`](mise/) | Global tool pins (node) |
 | **git** | [`git/`](git/) | Identity + global ignore |
 | **gh** CLI | [`gh/`](gh/) | Prefs and aliases; `hosts.yml` (auth) is *not* tracked |
@@ -192,7 +193,7 @@ The tracked files are the hand-written ones only:
 |------|------|
 | `fish/config.fish` | Env, PATH, tool hooks (direnv/fzf/zoxide/mise/atuin), aliases |
 | `fish/fish_plugins` | fisher manifest — currently `oh-my-fish/theme-bobthefish` |
-| `fish/conf.d/dracula-theme.fish` | Adaptive Dracula (dark) / Alucard (light) theme that follows the macOS appearance |
+| `fish/conf.d/catppuccin-theme.fish` | Catppuccin Mocha syntax, pager and bobthefish colors |
 | `fish/functions/wt.fish` | Wrapper so `wt <branch>` can `cd` the parent shell into the new worktree |
 
 Deliberately **not** tracked, because something else owns them:
@@ -201,9 +202,9 @@ Deliberately **not** tracked, because something else owns them:
   `fish_title.fish`, `fish_greeting.fish`, `__bobthefish_*`, `bobthefish_*` —
   installed by fisher from `fish_plugins`, so `fisher update` regenerates them.
 - `conf.d/atuin.env.fish` — written by the atuin installer.
-- `fish_variables` — fish universal variables (theme colors, fisher state). The
-  colors here are re-derived by `dracula_theme sync`, and the rest is
-  machine-local.
+- `fish_variables` — fish universal variables (fisher state, and stale color
+  values from the old adaptive theme). The current theme uses `set -g`, which
+  shadows anything left in here; `install.sh` erases the old universals once.
 
 ### Setup
 
@@ -221,15 +222,29 @@ chsh -s /opt/homebrew/bin/fish
 
 ### Theme
 
-`dracula-theme.fish` defines a `dracula_theme` command:
+Everything that runs in the terminal is **Catppuccin Mocha, dark only** — there
+is no light variant and nothing detects the system appearance.
 
-```sh
-dracula_theme auto      # follow macOS light/dark (default)
-dracula_theme dark      # pin Dracula
-dracula_theme light     # pin Alucard
-dracula_theme status    # show current mode + resolved appearance
-dracula_theme sync      # re-apply after editing the file
-```
+That is a deliberate consequence of pinning Ghostty to Mocha. fish, nvim, bat,
+eza and atuin have no background of their own; they paint onto whatever the
+terminal gives them. A light palette in a permanently dark terminal renders
+dark-on-dark, so the adaptive Dracula/Alucard theme that used to live here —
+and its `dracula_theme auto|dark|light` command — was removed rather than
+pinned.
+
+| Surface | Where the palette comes from |
+|---------|------------------------------|
+| Ghostty | `theme = Catppuccin Mocha` — built in, `ghostty +list-themes` |
+| fish syntax + pager | `fish/conf.d/catppuccin-theme.fish` |
+| bobthefish prompt | `set -g theme_color_scheme catppuccin-mocha` — built into bobthefish |
+| bat | `bat/config` — Catppuccin ships with bat 0.26 |
+| eza | `eza/theme.yml` — vendored from [eza-community/eza-themes](https://github.com/eza-community/eza-themes) |
+| atuin | `atuin/themes/catppuccin-mocha.toml` — vendored |
+| fzf | `FZF_DEFAULT_OPTS` in `config.fish` |
+| Neovim | `catppuccin/nvim` — see the [nvim repo](https://github.com/IsaacWang254/nvim) |
+
+Zed is the exception, and is not configured by this repo: it follows the system
+appearance between Catppuccin Latte and Mocha.
 
 `reload` (alias) re-sources the theme and `config.fish` in the current shell.
 
