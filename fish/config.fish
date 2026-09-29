@@ -19,27 +19,22 @@ set -gx BUN_INSTALL $HOME/.bun
 set -gx PATH $BUN_INSTALL/bin $PATH
 set -g fish_history main
 
-# Catppuccin Mocha for the tools that read their palette from the
-# environment rather than a config file. See fish/conf.d/catppuccin-theme.fish
-# for fish's own colours, and eza/theme.yml for the file-listing palette.
+# Gruvbox Dark Hard for the tools that read their palette from the
+# environment rather than a config file. fish's own colours come from its
+# default theme (on top of Ghostty's Gruvbox ANSI palette), and eza/theme.yml
+# holds the file-listing palette.
 set -gx EZA_CONFIG_DIR $HOME/.config/eza
 set -gx FZF_DEFAULT_OPTS "\
---color=bg+:#313244,bg:#1e1e2e,spinner:#f5e0dc,hl:#f38ba8 \
---color=fg:#cdd6f4,header:#f38ba8,info:#cba6f7,pointer:#f5e0dc \
---color=marker:#b4befe,fg+:#cdd6f4,prompt:#cba6f7,hl+:#f38ba8 \
---color=selected-bg:#45475a \
---color=border:#6c7086,label:#cdd6f4"
+--color=bg+:#3c3836,bg:#1d2021,spinner:#8ec07c,hl:#fb4934 \
+--color=fg:#ebdbb2,header:#fb4934,info:#83a598,pointer:#8ec07c \
+--color=marker:#fe8019,fg+:#ebdbb2,prompt:#fabd2f,hl+:#fb4934 \
+--color=selected-bg:#504945 \
+--color=border:#665c54,label:#ebdbb2"
 
-# Concise Nix segment for bobthefish.
-function __bobthefish_prompt_nix -S -d 'Display current nix environment'
-    [ "$theme_display_nix" = 'no' -o -z "$IN_NIX_SHELL" ]
-    and return
-
-    __bobthefish_start_segment $color_nix
-    echo -ns N ' '
-
-    set_color normal
-end
+# Git segment of the stock prompt (fish_vcs_prompt -> __fish_git_prompt).
+set -g __fish_git_prompt_showdirtystate 1
+set -g __fish_git_prompt_showuntrackedfiles 1
+set -g __fish_git_prompt_showupstream informative
 
 # Do not show a greeting.
 set --universal --erase fish_greeting
@@ -79,7 +74,7 @@ alias gs='git status'
 alias gc='git commit'
 alias gp='git push'
 alias gco='git checkout'
-alias reload='source ~/.config/fish/conf.d/catppuccin-theme.fish; source ~/.config/fish/config.fish'
+alias reload='source ~/.config/fish/config.fish'
 
 # These Tiobi launchers and ~/.tiobi-local.zsh contain zsh-specific functions.
 # Keep them available through a clean zsh subprocess until ported natively.

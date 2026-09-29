@@ -1,11 +1,11 @@
 # bat — https://github.com/sharkdp/bat
 #
-# Catppuccin Mocha ships with bat 0.26 (`bat --list-themes`), so this needs no
+# gruvbox-dark ships with bat 0.26 (`bat --list-themes`), so this needs no
 # theme files installed and no `bat cache --build`.
 #
-# Dark only: Ghostty is pinned to Mocha, and `cat` is aliased to bat in
-# fish/config.fish, so every page bat renders lands on a Mocha background.
---theme="Catppuccin Mocha"
+# Dark only: Ghostty is pinned to Gruvbox Dark Hard, and `cat` is aliased to
+# bat in fish/config.fish, so every page bat renders lands on a dark background.
+--theme="gruvbox-dark"
 
 # Show non-printables and use a compact header; --paging is set per-alias.
 --style="numbers,changes,header"

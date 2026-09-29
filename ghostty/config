@@ -1,65 +1,9 @@
-# Ghostty — https://ghostty.org/docs/config
-#
-# This file is the source of truth. It is symlinked to ~/.config/ghostty/config
-# by install.sh.
-#
-# NOTE: on macOS Ghostty ALSO reads
-#   ~/Library/Application Support/com.mitchellh.ghostty/config
-# and that file WINS on any key set in both. It is deliberately not present —
-# if Ghostty ever stops honouring this file, check whether something (the app's
-# own settings UI, for instance) recreated it.
-
-# --- Font ---------------------------------------------------------------
-# NK57 Monospace patched with Nerd Fonts glyphs. Not installed by this repo:
-#   https://github.com/IsaacWang254/nk57-monospace-nerd-font
-# Without it, this falls back to an unpatched face.
-font-family = "NK57 Monospace Nerd Font Mono"
-font-size = 13
-adjust-cell-height = 20%
-adjust-cell-width = 0
-
-# --- Colours ------------------------------------------------------------
-# Catppuccin Mocha, pinned dark. Ghostty ships all four flavours as built-in
-# themes (`ghostty +list-themes`), so nothing here needs installing.
-#
-# Deliberately NOT a `light:...,dark:...` pair. Everything that runs inside
-# this terminal -- fish, nvim, bat, eza, atuin -- is Mocha-only and paints
-# onto whatever background the terminal provides. A light terminal would put
-# Mocha's light-on-dark text on a light ground.
-theme = Catppuccin Mocha
-unfocused-split-opacity = 1
-
-# --- Cursor -------------------------------------------------------------
-cursor-style = bar
-cursor-style-blink = true
-
-# --- Window -------------------------------------------------------------
-window-theme = auto
-macos-titlebar-style = tabs
+theme = Gruvbox Dark Hard
+font-family = "JetBrains Mono"
+font-size = 16
+mouse-hide-while-typing = true
+window-decoration = true
+# keybind = global:cmd+/=toggle_quick_terminal
 macos-option-as-alt = true
-scrollbar = system
-scrollback-limit = 15000000
-
-# --- Quick terminal (super+\) -------------------------------------------
-quick-terminal-position = bottom
-quick-terminal-animation-duration = 0
-
-# --- Mouse --------------------------------------------------------------
-mouse-shift-capture = always
-mouse-hide-while-typing = false
-mouse-scroll-multiplier = precision:1,discrete:1
-
-# --- Clipboard ----------------------------------------------------------
-copy-on-select = false
-clipboard-trim-trailing-spaces = true
-clipboard-paste-protection = true
-
-# --- Shell / behaviour --------------------------------------------------
-shell-integration-features = ssh-env,ssh-terminfo
-confirm-close-surface = true
-
-# --- Keybinds -----------------------------------------------------------
-keybind = global:super+backslash=toggle_quick_terminal
-keybind = super+e=toggle_command_palette
-keybind = shift+enter=text:\n
-keybind = alt+backspace=text:\x1b\x7f
+background-opacity = 0.8
+background-blur-radius = 20
