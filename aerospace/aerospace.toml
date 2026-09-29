@@ -12,7 +12,8 @@
 # Workspaces are therefore named and keyed by PURPOSE, on base-layer letters:
 # one thumb plus one key. They work identically on the laptop keyboard.
 #
-#   E editor   T terminal   B browser   N notes   C chat   M media
+#   E editor   T terminal   B browser   N notes   C work comms (mail, teams, slack)
+#   D personal chat (discord, messages)   M media (spotify)
 
 # Start AeroSpace at login.
 start-at-login = true
@@ -25,19 +26,11 @@ enable-normalization-opposite-orientation-for-nested-containers = true
 default-root-container-layout = 'tiles'
 default-root-container-orientation = 'auto'   # widescreen -> horizontal, tall -> vertical
 
-accordion-padding = 30
 
 # Keep the mouse with the focused window when switching monitors.
 on-focused-monitor-changed = ['move-mouse monitor-lazy-center']
 
 # Gaps between windows and screen edges.
-[gaps]
-inner.horizontal = 8
-inner.vertical   = 8
-outer.left       = 8
-outer.bottom     = 8
-outer.top        = 8
-outer.right      = 8
 
 # ---------------------------------------------------------------------------
 # Send apps to their workspace on launch
@@ -86,15 +79,23 @@ if.app-id = 'com.tinyspeck.slackmacgap'
 run = 'move-node-to-workspace C'
 
 [[on-window-detected]]
-if.app-id = 'com.hnc.Discord'
+if.app-id = 'com.microsoft.teams2'
 run = 'move-node-to-workspace C'
+
+[[on-window-detected]]
+if.app-id = 'com.hnc.Discord'
+run = 'move-node-to-workspace D'
 
 [[on-window-detected]]
 if.app-id = 'com.apple.MobileSMS'
-run = 'move-node-to-workspace C'
+run = 'move-node-to-workspace D'
 
+# Only the main viewer (title ends in "N messages"). This rule fires for EVERY
+# new window, so matching the bare app-id also yanked compose windows and the
+# search popup to C, dragging focus away mid-typing.
 [[on-window-detected]]
 if.app-id = 'com.apple.mail'
+if.window-title-regex-substring = 'messages?$'
 run = 'move-node-to-workspace C'
 
 [[on-window-detected]]
@@ -138,7 +139,8 @@ alt-e = 'workspace E'    # editor
 alt-t = 'workspace T'    # terminal
 alt-b = 'workspace B'    # browser
 alt-n = 'workspace N'    # notes
-alt-c = 'workspace C'    # chat
+alt-c = 'workspace C'    # work comms (mail, teams, slack)
+alt-d = ['workspace D', 'exec-and-forget open -a Discord; open -a Messages']
 alt-m = 'workspace M'    # media
 
 # Send window to workspace (and follow it)
@@ -147,6 +149,7 @@ alt-shift-t = ['move-node-to-workspace T', 'workspace T']
 alt-shift-b = ['move-node-to-workspace B', 'workspace B']
 alt-shift-n = ['move-node-to-workspace N', 'workspace N']
 alt-shift-c = ['move-node-to-workspace C', 'workspace C']
+alt-shift-d = ['move-node-to-workspace D', 'workspace D']
 alt-shift-m = ['move-node-to-workspace M', 'workspace M']
 
 # Jump back to the previous workspace / bounce a window between monitors
