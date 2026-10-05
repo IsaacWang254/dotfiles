@@ -22,7 +22,10 @@ start-at-login = true
 enable-normalization-flatten-containers = true
 enable-normalization-opposite-orientation-for-nested-containers = true
 
-# Default layout for new workspaces.
+# Default layout for new workspaces. One window still fills the screen; a
+# second window should split. Accordion (alt-comma) and fullscreen (alt-f)
+# both look like stacked full-screen windows, so drop-in bindings below
+# force the workspace root back to tiles.
 default-root-container-layout = 'tiles'
 default-root-container-orientation = 'auto'   # widescreen -> horizontal, tall -> vertical
 
@@ -37,58 +40,66 @@ on-focused-monitor-changed = ['move-mouse monitor-lazy-center']
 # ---------------------------------------------------------------------------
 # Bundle ids read from each app's Info.plist. An app not listed here just opens
 # wherever you are, which is the right default for one-offs like Preview.
+#
+# New windows are forced tiling (not floating / native-fullscreen) before any
+# workspace move. After a move, `layout --root tiles` splits with whatever is
+# already on that workspace instead of stacking two full-size windows.
+
+[[on-window-detected]]
+check-further-callbacks = true
+run = ['macos-native-fullscreen off', 'fullscreen off', 'layout tiling']
 
 [[on-window-detected]]           # Cursor
 if.app-id = 'com.todesktop.230313mzl4w4u92'
-run = 'move-node-to-workspace E'
+run = ['move-node-to-workspace E', 'flatten-workspace-tree --workspace E', 'layout --workspace E --root tiles']
 
 [[on-window-detected]]
 if.app-id = 'com.microsoft.VSCode'
-run = 'move-node-to-workspace E'
+run = ['move-node-to-workspace E', 'flatten-workspace-tree --workspace E', 'layout --workspace E --root tiles']
 
 [[on-window-detected]]
 if.app-id = 'dev.zed.Zed'
-run = 'move-node-to-workspace E'
+run = ['move-node-to-workspace E', 'flatten-workspace-tree --workspace E', 'layout --workspace E --root tiles']
 
 [[on-window-detected]]
 if.app-id = 'com.jetbrains.intellij'
-run = 'move-node-to-workspace E'
+run = ['move-node-to-workspace E', 'flatten-workspace-tree --workspace E', 'layout --workspace E --root tiles']
 
 [[on-window-detected]]
 if.app-id = 'com.apple.dt.Xcode'
-run = 'move-node-to-workspace E'
+run = ['move-node-to-workspace E', 'flatten-workspace-tree --workspace E', 'layout --workspace E --root tiles']
 
 [[on-window-detected]]
 if.app-id = 'com.mitchellh.ghostty'
-run = 'move-node-to-workspace T'
+run = ['move-node-to-workspace T', 'flatten-workspace-tree --workspace T', 'layout --workspace T --root tiles']
 
 [[on-window-detected]]
 if.app-id = 'com.google.Chrome'
-run = 'move-node-to-workspace B'
+run = ['move-node-to-workspace B', 'flatten-workspace-tree --workspace B', 'layout --workspace B --root tiles']
 
 [[on-window-detected]]
 if.app-id = 'com.apple.Safari'
-run = 'move-node-to-workspace B'
+run = ['move-node-to-workspace B', 'flatten-workspace-tree --workspace B', 'layout --workspace B --root tiles']
 
 [[on-window-detected]]
 if.app-id = 'md.obsidian'
-run = 'move-node-to-workspace N'
+run = ['move-node-to-workspace N', 'flatten-workspace-tree --workspace N', 'layout --workspace N --root tiles']
 
 [[on-window-detected]]
 if.app-id = 'com.tinyspeck.slackmacgap'
-run = 'move-node-to-workspace C'
+run = ['move-node-to-workspace C', 'flatten-workspace-tree --workspace C', 'layout --workspace C --root tiles']
 
 [[on-window-detected]]
 if.app-id = 'com.microsoft.teams2'
-run = 'move-node-to-workspace C'
+run = ['move-node-to-workspace C', 'flatten-workspace-tree --workspace C', 'layout --workspace C --root tiles']
 
 [[on-window-detected]]
 if.app-id = 'com.hnc.Discord'
-run = 'move-node-to-workspace D'
+run = ['move-node-to-workspace D', 'flatten-workspace-tree --workspace D', 'layout --workspace D --root tiles']
 
 [[on-window-detected]]
 if.app-id = 'com.apple.MobileSMS'
-run = 'move-node-to-workspace D'
+run = ['move-node-to-workspace D', 'flatten-workspace-tree --workspace D', 'layout --workspace D --root tiles']
 
 # Only the main viewer (title ends in "N messages"). This rule fires for EVERY
 # new window, so matching the bare app-id also yanked compose windows and the
@@ -96,15 +107,15 @@ run = 'move-node-to-workspace D'
 [[on-window-detected]]
 if.app-id = 'com.apple.mail'
 if.window-title-regex-substring = 'messages?$'
-run = 'move-node-to-workspace C'
+run = ['move-node-to-workspace C', 'flatten-workspace-tree --workspace C', 'layout --workspace C --root tiles']
 
 [[on-window-detected]]
 if.app-id = 'notion.mail.id'
-run = 'move-node-to-workspace C'
+run = ['move-node-to-workspace C', 'flatten-workspace-tree --workspace C', 'layout --workspace C --root tiles']
 
 [[on-window-detected]]
 if.app-id = 'com.spotify.client'
-run = 'move-node-to-workspace M'
+run = ['move-node-to-workspace M', 'flatten-workspace-tree --workspace M', 'layout --workspace M --root tiles']
 
 # ---------------------------------------------------------------------------
 # Main mode
@@ -143,14 +154,16 @@ alt-c = 'workspace C'    # work comms (mail, teams, slack)
 alt-d = ['workspace D', 'exec-and-forget open -a Discord; open -a Messages']
 alt-m = 'workspace M'    # media
 
-# Send window to workspace (and follow it)
-alt-shift-e = ['move-node-to-workspace E', 'workspace E']
-alt-shift-t = ['move-node-to-workspace T', 'workspace T']
-alt-shift-b = ['move-node-to-workspace B', 'workspace B']
-alt-shift-n = ['move-node-to-workspace N', 'workspace N']
-alt-shift-c = ['move-node-to-workspace C', 'workspace C']
-alt-shift-d = ['move-node-to-workspace D', 'workspace D']
-alt-shift-m = ['move-node-to-workspace M', 'workspace M']
+# Send window to workspace, follow it, and split with whatever is already there.
+# Without --root tiles, a fullscreen/accordion destination keeps both windows
+# stacked at full size.
+alt-shift-e = ['macos-native-fullscreen off', 'fullscreen off', 'layout tiling', 'move-node-to-workspace E --focus-follows-window', 'flatten-workspace-tree --workspace E', 'layout --workspace E --root tiles']
+alt-shift-t = ['macos-native-fullscreen off', 'fullscreen off', 'layout tiling', 'move-node-to-workspace T --focus-follows-window', 'flatten-workspace-tree --workspace T', 'layout --workspace T --root tiles']
+alt-shift-b = ['macos-native-fullscreen off', 'fullscreen off', 'layout tiling', 'move-node-to-workspace B --focus-follows-window', 'flatten-workspace-tree --workspace B', 'layout --workspace B --root tiles']
+alt-shift-n = ['macos-native-fullscreen off', 'fullscreen off', 'layout tiling', 'move-node-to-workspace N --focus-follows-window', 'flatten-workspace-tree --workspace N', 'layout --workspace N --root tiles']
+alt-shift-c = ['macos-native-fullscreen off', 'fullscreen off', 'layout tiling', 'move-node-to-workspace C --focus-follows-window', 'flatten-workspace-tree --workspace C', 'layout --workspace C --root tiles']
+alt-shift-d = ['macos-native-fullscreen off', 'fullscreen off', 'layout tiling', 'move-node-to-workspace D --focus-follows-window', 'flatten-workspace-tree --workspace D', 'layout --workspace D --root tiles']
+alt-shift-m = ['macos-native-fullscreen off', 'fullscreen off', 'layout tiling', 'move-node-to-workspace M --focus-follows-window', 'flatten-workspace-tree --workspace M', 'layout --workspace M --root tiles']
 
 # Jump back to the previous workspace / bounce a window between monitors
 alt-tab = 'workspace-back-and-forth'
