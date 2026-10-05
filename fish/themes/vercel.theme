@@ -1,0 +1,103 @@
+# name: 'Vercel'
+# Geist light/dark palette, matching ghostty/themes/Vercel {Light,Dark}.
+# Applied by `fish_config theme choose vercel` in config.fish; fish swaps
+# sections when the terminal reports a light/dark change.
+
+[light]
+# preferred_background: ffffff
+fish_color_normal 171717
+fish_color_command 7c00c7
+fish_color_keyword bd2864
+fish_color_param 171717
+fish_color_option 006bff
+fish_color_quote 297a3a
+fish_color_redirection bd2864
+fish_color_operator bd2864
+fish_color_end bd2864
+fish_color_escape 067a6e
+fish_color_comment 666666
+fish_color_autosuggestion a8a8a8
+fish_color_error ea001d
+fish_color_cancel ea001d
+fish_color_gray a8a8a8
+fish_color_selection --background=e5e5e5
+fish_color_search_match --background=e5e5e5
+fish_color_history_current --bold
+fish_color_valid_path --underline
+fish_color_cwd 006bff
+fish_color_cwd_root ea001d
+fish_color_user 297a3a
+fish_color_host 171717
+fish_color_host_remote a35200
+fish_color_status ea001d
+fish_pager_color_progress 666666
+fish_pager_color_prefix 006bff --bold
+fish_pager_color_completion 171717
+fish_pager_color_description 666666
+fish_pager_color_selected_background --background=e5e5e5
+
+[dark]
+# preferred_background: 0a0a0a
+fish_color_normal ededed
+fish_color_command c472fb
+fish_color_keyword f12b82
+fish_color_param ededed
+fish_color_option 52a8ff
+fish_color_quote 00ac3a
+fish_color_redirection f12b82
+fish_color_operator f12b82
+fish_color_end f12b82
+fish_color_escape 00aa95
+fish_color_comment a0a0a0
+fish_color_autosuggestion 676767
+fish_color_error f32e40
+fish_color_cancel f32e40
+fish_color_gray 676767
+fish_color_selection --background=2e2e2e
+fish_color_search_match --background=2e2e2e
+fish_color_history_current --bold
+fish_color_valid_path --underline
+fish_color_cwd 52a8ff
+fish_color_cwd_root f32e40
+fish_color_user 00ac3a
+fish_color_host ededed
+fish_color_host_remote ffae00
+fish_color_status f32e40
+fish_pager_color_progress a0a0a0
+fish_pager_color_prefix 52a8ff --bold
+fish_pager_color_completion ededed
+fish_pager_color_description a0a0a0
+fish_pager_color_selected_background --background=2e2e2e
+
+[unknown]
+# preferred_background: 0a0a0a
+fish_color_normal ededed
+fish_color_command c472fb
+fish_color_keyword f12b82
+fish_color_param ededed
+fish_color_option 52a8ff
+fish_color_quote 00ac3a
+fish_color_redirection f12b82
+fish_color_operator f12b82
+fish_color_end f12b82
+fish_color_escape 00aa95
+fish_color_comment a0a0a0
+fish_color_autosuggestion 676767
+fish_color_error f32e40
+fish_color_cancel f32e40
+fish_color_gray 676767
+fish_color_selection --background=2e2e2e
+fish_color_search_match --background=2e2e2e
+fish_color_history_current --bold
+fish_color_valid_path --underline
+fish_color_cwd 52a8ff
+fish_color_cwd_root f32e40
+fish_color_user 00ac3a
+fish_color_host ededed
+fish_color_host_remote ffae00
+fish_color_status f32e40
+fish_pager_color_progress a0a0a0
+fish_pager_color_prefix 52a8ff --bold
+fish_pager_color_completion ededed
+fish_pager_color_description a0a0a0
+fish_pager_color_selected_background --background=2e2e2e

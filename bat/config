@@ -1,11 +1,12 @@
 # bat — https://github.com/sharkdp/bat
 #
-# gruvbox-dark ships with bat 0.26 (`bat --list-themes`), so this needs no
-# theme files installed and no `bat cache --build`.
-#
-# Dark only: Ghostty is pinned to Gruvbox Dark Hard, and `cat` is aliased to
-# bat in fish/config.fish, so every page bat renders lands on a dark background.
---theme="gruvbox-dark"
+# Vercel, light or dark. bat asks the terminal for its background colour on
+# each run and picks --theme-light / --theme-dark to match, so it follows
+# Ghostty (which follows macOS). The two .tmTheme files live in bat/themes/;
+# install.sh links them into ~/.config/bat/themes and runs `bat cache --build`.
+--theme="auto"
+--theme-light="Vercel Light"
+--theme-dark="Vercel Dark"
 
 # Show non-printables and use a compact header; --paging is set per-alias.
 --style="numbers,changes,header"

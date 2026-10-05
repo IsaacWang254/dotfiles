@@ -1,0 +1,25 @@
+# Vercel Light -- Geist light palette, the same values as the Zed "Vercel
+# Light" theme (NathanBrodin/zed-vercel-theme). Paired with "Vercel Dark" in
+# ../config so Ghostty follows the macOS appearance.
+background = #ffffff
+foreground = #171717
+cursor-color = #171717
+cursor-text = #ffffff
+selection-background = #e5e5e5
+selection-foreground = #171717
+palette = 0=#171717
+palette = 1=#ea001d
+palette = 2=#297a3a
+palette = 3=#a35200
+palette = 4=#006bff
+palette = 5=#7c00c7
+palette = 6=#067a6e
+palette = 7=#8f8f8f
+palette = 8=#666666
+palette = 9=#da2f35
+palette = 10=#398e4a
+palette = 11=#aa4d00
+palette = 12=#0060f1
+palette = 13=#bd2864
+palette = 14=#107d32
+palette = 15=#a8a8a8

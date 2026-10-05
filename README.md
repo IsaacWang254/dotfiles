@@ -10,10 +10,10 @@ Personal config, portable across machines.
 | **Karabiner-Elements** key remap (macOS) | [`karabiner/`](karabiner/) | CapsLock → Esc on tap, Control on hold |
 | **AeroSpace** tiling WM (macOS) | [`aerospace/`](aerospace/) | Keyboard-driven tiling via [AeroSpace](https://github.com/nikitabobko/AeroSpace) |
 | **Corne** keyboard keymap | [`corne/`](corne/) | 42-key split on a 2.4GHz dongle; keymap written over raw HID, not flashed |
-| **Ghostty** terminal | [`ghostty/`](ghostty/) | JetBrains Mono; Gruvbox Dark Hard, pinned dark |
+| **Ghostty** terminal | [`ghostty/`](ghostty/) | JetBrains Mono; Vercel Light/Dark, follows the system appearance |
 | **Homebrew** packages | [`Brewfile`](Brewfile) | Taps, formulae, casks, editor extensions, global npm packages |
-| **atuin** shell history | [`atuin/`](atuin/) | Daemon + sync-records + `enter_accept` + Gruvbox theme; key and history DB are *not* tracked |
-| **bat** / **eza** | [`bat/`](bat/), [`eza/`](eza/) | Gruvbox palettes for the `cat` and `ls` aliases |
+| **atuin** shell history | [`atuin/`](atuin/) | Daemon + sync-records + `enter_accept`; key and history DB are *not* tracked |
+| **bat** | [`bat/`](bat/) | Vercel Light/Dark themes for the `cat` alias |
 | **mise** runtime manager | [`mise/`](mise/) | Global tool pins (node) |
 | **git** | [`git/`](git/) | Identity + global ignore |
 | **gh** CLI | [`gh/`](gh/) | Prefs and aliases; `hosts.yml` (auth) is *not* tracked |
@@ -212,29 +212,29 @@ chsh -s /opt/homebrew/bin/fish
 
 ### Theme
 
-Everything that runs in the terminal is **Gruvbox Dark Hard, dark only** —
-there is no light variant and nothing detects the system appearance.
+Everything is **Vercel** (the Geist palette), **light or dark following the
+macOS appearance**. Ghostty switches between `Vercel Light` and `Vercel Dark`
+on its own, and every tool that paints onto the terminal follows it: fish and
+Neovim get told about the change by Ghostty, bat asks the terminal on each run,
+and eza/atuin just use the ANSI palette. Nothing needs a manual toggle.
 
-That is a deliberate consequence of pinning Ghostty to Gruvbox Dark Hard.
-fish, nvim, bat, eza and atuin have no background of their own; they paint onto
-whatever the terminal gives them. A light palette in a permanently dark
-terminal renders dark-on-dark, so the adaptive Dracula/Alucard theme that used
-to live here — and its `dracula_theme auto|dark|light` command — was removed
-rather than pinned.
+The palette is the one from the Zed
+[Vercel theme](https://github.com/NathanBrodin/zed-vercel-theme), so the
+editors and terminal agree on every colour.
 
 | Surface | Where the palette comes from |
 |---------|------------------------------|
-| Ghostty | `theme = Gruvbox Dark Hard` — built in, `ghostty +list-themes` |
-| fish syntax + pager | fish's default colour theme — no `fish_color_*` overrides; the colours land on Ghostty's Gruvbox ANSI palette |
+| Ghostty | `ghostty/themes/Vercel {Light,Dark}`, `theme = light:…,dark:…` in `ghostty/config` |
+| fish syntax + pager | `fish/themes/vercel.theme` (`[light]`/`[dark]` sections), chosen in `config.fish`; fish swaps sections when `$fish_terminal_color_theme` changes |
 | fish prompt | stock `fish_prompt` + `fish_vcs_prompt` — git segment tuned via `__fish_git_prompt_*` globals in `config.fish` |
-| bat | `bat/config` — `gruvbox-dark` ships with bat 0.26 |
-| eza | `eza/theme.yml` — vendored from [eza-community/eza-themes](https://github.com/eza-community/eza-themes) |
-| atuin | `atuin/themes/gruvbox-dark.toml` — vendored |
-| fzf | `FZF_DEFAULT_OPTS` in `config.fish` |
-| Neovim | [ellisonleao/gruvbox.nvim](https://github.com/ellisonleao/gruvbox.nvim), hard contrast — configured in the separate [nvim repo](https://github.com/IsaacWang254/nvim) |
+| bat | `bat/themes/Vercel {Light,Dark}.tmTheme`, picked by `--theme=auto` in `bat/config` |
+| eza, atuin | no theme — their defaults are drawn in Ghostty's ANSI palette |
+| fzf | `FZF_DEFAULT_OPTS`, re-exported by `__vercel_fzf_colors` in `config.fish` on each appearance change |
+| Neovim | `colors/vercel.lua` in the separate [nvim repo](https://github.com/IsaacWang254/nvim) — follows `'background'`, which Neovim updates from the terminal |
 
-Zed is the exception, and is not configured by this repo: it follows the
-system appearance.
+Zed (`"theme": {"mode": "system", …}`) and Cursor/VS Code
+(`window.autoDetectColorScheme`) follow the system too, but are not configured
+by this repo.
 
 `reload` (alias) re-sources `config.fish` in the current shell.
 

@@ -1,9 +1,13 @@
-theme = Gruvbox Dark Hard
+# Follows the macOS appearance. Both themes live in ./themes (symlinked to
+# ~/.config/ghostty/themes by install.sh); fish, nvim and bat switch with it.
+theme = light:Vercel Light,dark:Vercel Dark
 font-family = "JetBrains Mono"
 font-size = 16
-mouse-hide-while-typing = true
 window-decoration = true
 # keybind = global:cmd+/=toggle_quick_terminal
 macos-option-as-alt = true
-background-opacity = 0.8
-background-blur-radius = 20
+cursor-style = block
+# Shell integration's "cursor" feature turns the cursor into a bar at the
+# prompt, overriding cursor-style above. Turn just that feature off.
+shell-integration-features = no-cursor
+cursor-style-blink = false

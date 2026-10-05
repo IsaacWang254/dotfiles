@@ -19,17 +19,33 @@ set -gx BUN_INSTALL $HOME/.bun
 set -gx PATH $BUN_INSTALL/bin $PATH
 set -g fish_history main
 
-# Gruvbox Dark Hard for the tools that read their palette from the
-# environment rather than a config file. fish's own colours come from its
-# default theme (on top of Ghostty's Gruvbox ANSI palette), and eza/theme.yml
-# holds the file-listing palette.
-set -gx EZA_CONFIG_DIR $HOME/.config/eza
-set -gx FZF_DEFAULT_OPTS "\
---color=bg+:#3c3836,bg:#1d2021,spinner:#8ec07c,hl:#fb4934 \
---color=fg:#ebdbb2,header:#fb4934,info:#83a598,pointer:#8ec07c \
---color=marker:#fe8019,fg+:#ebdbb2,prompt:#fabd2f,hl+:#fb4934 \
---color=selected-bg:#504945 \
---color=border:#665c54,label:#ebdbb2"
+# Vercel, light or dark following the macOS appearance. Ghostty switches
+# between ghostty/themes/Vercel {Light,Dark} and tells fish, which sets
+# $fish_terminal_color_theme; the theme in themes/vercel.theme has a section
+# for each and fish swaps them itself. eza and atuin use the terminal's ANSI
+# palette, so they follow along with no config.
+if status is-interactive
+    fish_config theme choose vercel
+end
+
+# fzf reads its colours from the environment once per invocation, so re-export
+# them whenever the terminal's appearance changes.
+function __vercel_fzf_colors --on-variable fish_terminal_color_theme
+    if test "$fish_terminal_color_theme" = light
+        set -gx FZF_DEFAULT_OPTS "\
+--color=fg:#171717,bg:-1,hl:#006bff,fg+:#171717,bg+:#ebebeb,hl+:#006bff \
+--color=info:#666666,prompt:#7c00c7,pointer:#bd2864,marker:#297a3a \
+--color=spinner:#bd2864,header:#666666,border:#ebebeb,label:#171717 \
+--color=selected-bg:#e5e5e5"
+    else
+        set -gx FZF_DEFAULT_OPTS "\
+--color=fg:#ededed,bg:-1,hl:#52a8ff,fg+:#ededed,bg+:#1a1a1a,hl+:#52a8ff \
+--color=info:#a0a0a0,prompt:#c472fb,pointer:#f12b82,marker:#00ac3a \
+--color=spinner:#f12b82,header:#a0a0a0,border:#2e2e2e,label:#ededed \
+--color=selected-bg:#2e2e2e"
+    end
+end
+__vercel_fzf_colors
 
 # Git segment of the stock prompt (fish_vcs_prompt -> __fish_git_prompt).
 set -g __fish_git_prompt_showdirtystate 1

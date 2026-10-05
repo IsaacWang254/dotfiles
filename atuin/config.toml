@@ -293,10 +293,9 @@ autostart = true
 ## The port that should be used for TCP on non unix systems
 # tcp_port = 8889
 
-# Gruvbox Dark Hard, vendored in atuin/themes/ and symlinked by install.sh.
-# Dark only, to match the pinned Ghostty theme.
+# atuin's default theme is drawn in the terminal's ANSI colours, so it picks up
+# Ghostty's Vercel Light/Dark palette and follows the macOS appearance.
 [theme]
-name = "gruvbox-dark"
 
 ## Color theme to use for rendering in the terminal.
 ## There are some built-in themes, including the base theme ("default"),

@@ -74,9 +74,12 @@ fi
 # ---------------------------------------------------------------------------
 # Ghostty (terminal)
 # ---------------------------------------------------------------------------
-echo "==> Symlinking Ghostty config -> ~/.config/ghostty/config"
-mkdir -p "$HOME/.config/ghostty"
+echo "==> Symlinking Ghostty config + Vercel themes -> ~/.config/ghostty/"
+mkdir -p "$HOME/.config/ghostty/themes"
 ln -sf "$DOTFILES/ghostty/config" "$HOME/.config/ghostty/config"
+for theme in "Vercel Light" "Vercel Dark"; do
+  ln -sf "$DOTFILES/ghostty/themes/$theme" "$HOME/.config/ghostty/themes/$theme"
+done
 
 # ---------------------------------------------------------------------------
 # AeroSpace (tiling window manager)
@@ -124,14 +127,16 @@ mkdir -p "$FISH_CFG_DIR/conf.d" "$FISH_CFG_DIR/functions"
 ln -sf "$DOTFILES/fish/config.fish"                "$FISH_CFG_DIR/config.fish"
 ln -sf "$DOTFILES/fish/fish_plugins"               "$FISH_CFG_DIR/fish_plugins"
 ln -sf "$DOTFILES/fish/functions/wt.fish"          "$FISH_CFG_DIR/functions/wt.fish"
+mkdir -p "$FISH_CFG_DIR/themes"
+ln -sf "$DOTFILES/fish/themes/vercel.theme"        "$FISH_CFG_DIR/themes/vercel.theme"
 
 # Stale theme files from previous iterations of this repo.
 rm -f "$FISH_CFG_DIR/conf.d/dracula-theme.fish"
 rm -f "$FISH_CFG_DIR/conf.d/catppuccin-theme.fish"
 
 # fish_config's web UI writes conf.d/fish_frozen_theme.fish, which overrides
-# fish's default colour theme and so silently wins. Its own header says to
-# delete it rather than edit it. Removed here so the default theme applies.
+# the theme config.fish chooses and so silently wins. Its own header says to
+# delete it rather than edit it. Removed here so the Vercel theme applies.
 rm -f "$FISH_CFG_DIR/conf.d/fish_frozen_theme.fish"
 if command -v fish >/dev/null 2>&1; then
   fish -c 'for v in (set --names --universal)
@@ -182,19 +187,18 @@ ln -sf "$DOTFILES/atuin/config.toml" "$HOME/.config/atuin/config.toml"
 command -v atuin >/dev/null 2>&1 \
   || echo "   note: atuin not installed.  brew install atuin"
 
-echo "==> Symlinking bat config -> ~/.config/bat/config"
+echo "==> Symlinking bat config + Vercel themes -> ~/.config/bat/"
 mkdir -p "$HOME/.config/bat"
 ln -sf "$DOTFILES/bat/config" "$HOME/.config/bat/config"
+ln -sfn "$DOTFILES/bat/themes" "$HOME/.config/bat/themes"
+# bat only sees custom themes after rebuilding its cache.
+command -v bat >/dev/null 2>&1 && bat cache --build >/dev/null
 
-echo "==> Symlinking eza theme -> ~/.config/eza/theme.yml"
-mkdir -p "$HOME/.config/eza"
-ln -sf "$DOTFILES/eza/theme.yml" "$HOME/.config/eza/theme.yml"
-
-echo "==> Symlinking atuin theme -> ~/.config/atuin/themes/"
-mkdir -p "$HOME/.config/atuin/themes"
-ln -sf "$DOTFILES/atuin/themes/gruvbox-dark.toml" \
-       "$HOME/.config/atuin/themes/gruvbox-dark.toml"
-rm -f "$HOME/.config/atuin/themes/catppuccin-mocha.toml"
+# eza and atuin now use the terminal's ANSI palette (Ghostty's Vercel
+# Light/Dark), so their old vendored themes are just removed.
+rm -f "$HOME/.config/eza/theme.yml"
+rm -f "$HOME/.config/atuin/themes/gruvbox-dark.toml" \
+      "$HOME/.config/atuin/themes/catppuccin-mocha.toml"
 
 echo "==> Symlinking mise config -> ~/.config/mise/config.toml"
 mkdir -p "$HOME/.config/mise"
@@ -220,9 +224,9 @@ fi
 # Shell tools with no config file of their own
 # ---------------------------------------------------------------------------
 # zoxide, direnv and thefuck are configured entirely from fish/config.fish
-# (init hooks + aliases) and keep no tracked config here. eza, bat and fzf now
-# carry Gruvbox palettes -- the first two are symlinked above, fzf's lives
-# in FZF_DEFAULT_OPTS in fish/config.fish.
+# (init hooks + aliases) and keep no tracked config here. fzf's Vercel
+# light/dark colours live in FZF_DEFAULT_OPTS in fish/config.fish; eza uses
+# the terminal palette.
 # They still have to be installed for those aliases to work:
 # Plain string, not an array: macOS ships bash 3.2, where expanding an empty
 # array under `set -u` is an unbound-variable error.

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!-- Vercel Dark: Geist palette, matching ghostty/themes/Vercel Dark. -->
+<plist version="1.0">
+<dict>
+  <key>name</key><string>Vercel Dark</string>
+  <key>settings</key>
+  <array>
+    <dict><key>settings</key><dict><key>background</key><string>#0a0a0a</string><key>foreground</key><string>#ededed</string><key>caret</key><string>#ededed</string><key>lineHighlight</key><string>#1a1a1a</string><key>selection</key><string>#2e2e2e</string><key>gutter</key><string>#0a0a0a</string><key>gutterForeground</key><string>#878787</string><key>invisibles</key><string>#878787</string></dict></dict>
+    <dict><key>name</key><string>Comment</string><key>scope</key><string>comment, punctuation.definition.comment</string><key>settings</key><dict><key>foreground</key><string>#a1a1a1</string></dict></dict>
+    <dict><key>name</key><string>String</string><key>scope</key><string>string, string.quoted, punctuation.definition.string</string><key>settings</key><dict><key>foreground</key><string>#00ac3a</string></dict></dict>
+    <dict><key>name</key><string>Regex / escape</string><key>scope</key><string>string.regexp, constant.character.escape</string><key>settings</key><dict><key>foreground</key><string>#00ac3a</string></dict></dict>
+    <dict><key>name</key><string>Number / constant</string><key>scope</key><string>constant.numeric, constant.language, constant.other, support.constant, variable.other.constant</string><key>settings</key><dict><key>foreground</key><string>#52a8ff</string></dict></dict>
+    <dict><key>name</key><string>Keyword</string><key>scope</key><string>keyword, keyword.control, keyword.operator.new, storage, storage.type, storage.modifier</string><key>settings</key><dict><key>foreground</key><string>#f12b82</string></dict></dict>
+    <dict><key>name</key><string>Operator</string><key>scope</key><string>keyword.operator</string><key>settings</key><dict><key>foreground</key><string>#f12b82</string></dict></dict>
+    <dict><key>name</key><string>Function</string><key>scope</key><string>entity.name.function, support.function, meta.function-call variable.function, variable.function</string><key>settings</key><dict><key>foreground</key><string>#c472fb</string></dict></dict>
+    <dict><key>name</key><string>Type</string><key>scope</key><string>entity.name.type, entity.name.class, support.type, support.class, entity.other.inherited-class, storage.type.primitive</string><key>settings</key><dict><key>foreground</key><string>#c472fb</string></dict></dict>
+    <dict><key>name</key><string>Attribute</string><key>scope</key><string>entity.other.attribute-name</string><key>settings</key><dict><key>foreground</key><string>#c472fb</string></dict></dict>
+    <dict><key>name</key><string>Tag</string><key>scope</key><string>entity.name.tag, punctuation.definition.tag</string><key>settings</key><dict><key>foreground</key><string>#00ac3a</string></dict></dict>
+    <dict><key>name</key><string>Property</string><key>scope</key><string>variable.other.property, variable.other.object.property, support.variable.property, meta.object-literal.key, support.type.property-name</string><key>settings</key><dict><key>foreground</key><string>#52a8ff</string></dict></dict>
+    <dict><key>name</key><string>Variable</string><key>scope</key><string>variable, variable.parameter</string><key>settings</key><dict><key>foreground</key><string>#ededed</string></dict></dict>
+    <dict><key>name</key><string>Special variable</string><key>scope</key><string>variable.language, support.variable</string><key>settings</key><dict><key>foreground</key><string>#52a8ff</string></dict></dict>
+    <dict><key>name</key><string>Punctuation</string><key>scope</key><string>punctuation</string><key>settings</key><dict><key>foreground</key><string>#ededed</string></dict></dict>
+    <dict><key>name</key><string>Heading</string><key>scope</key><string>markup.heading, entity.name.section</string><key>settings</key><dict><key>foreground</key><string>#52a8ff</string><key>fontStyle</key><string>bold</string></dict></dict>
+    <dict><key>name</key><string>Bold</string><key>scope</key><string>markup.bold</string><key>settings</key><dict><key>fontStyle</key><string>bold</string></dict></dict>
+    <dict><key>name</key><string>Italic</string><key>scope</key><string>markup.italic</string><key>settings</key><dict><key>fontStyle</key><string>italic</string></dict></dict>
+    <dict><key>name</key><string>Link</string><key>scope</key><string>markup.underline.link, string.other.link</string><key>settings</key><dict><key>foreground</key><string>#52a8ff</string></dict></dict>
+    <dict><key>name</key><string>Raw</string><key>scope</key><string>markup.raw, markup.inline.raw</string><key>settings</key><dict><key>foreground</key><string>#00ac3a</string></dict></dict>
+    <dict><key>name</key><string>Quote</string><key>scope</key><string>markup.quote</string><key>settings</key><dict><key>foreground</key><string>#a1a1a1</string></dict></dict>
+    <dict><key>name</key><string>List</string><key>scope</key><string>markup.list punctuation.definition.list</string><key>settings</key><dict><key>foreground</key><string>#f12b82</string></dict></dict>
+    <dict><key>name</key><string>Inserted</string><key>scope</key><string>markup.inserted, meta.diff.header.to-file</string><key>settings</key><dict><key>foreground</key><string>#00ac3a</string></dict></dict>
+    <dict><key>name</key><string>Deleted</string><key>scope</key><string>markup.deleted, meta.diff.header.from-file</string><key>settings</key><dict><key>foreground</key><string>#f32e40</string></dict></dict>
+    <dict><key>name</key><string>Changed</string><key>scope</key><string>markup.changed</string><key>settings</key><dict><key>foreground</key><string>#ffae00</string></dict></dict>
+    <dict><key>name</key><string>Diff range</string><key>scope</key><string>meta.diff.range, meta.diff.header</string><key>settings</key><dict><key>foreground</key><string>#52a8ff</string></dict></dict>
+    <dict><key>name</key><string>Invalid</string><key>scope</key><string>invalid, invalid.illegal</string><key>settings</key><dict><key>foreground</key><string>#f32e40</string></dict></dict>
+  </array>
+</dict>
+</plist>
