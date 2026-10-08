@@ -44,6 +44,18 @@ on-focused-monitor-changed = ['move-mouse monitor-lazy-center']
 # New windows are forced tiling (not floating / native-fullscreen) before any
 # workspace move. After a move, `layout --root tiles` splits with whatever is
 # already on that workspace instead of stacking two full-size windows.
+#
+# Apps that should stay floating (settings panes, recorders, popups) are listed
+# first. Callbacks stop at the first match unless check-further-callbacks is set,
+# so these never hit the catch-all tiling rule below.
+
+[[on-window-detected]]
+if.app-id = 'com.apple.systempreferences'
+run = 'layout floating'
+
+[[on-window-detected]]
+if.app-id = 'so.cap.desktop'
+run = 'layout floating'
 
 [[on-window-detected]]
 check-further-callbacks = true
