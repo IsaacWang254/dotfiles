@@ -167,7 +167,7 @@ alt-t = 'workspace T'    # terminal
 alt-b = 'workspace B'    # browser
 alt-n = 'workspace N'    # notes
 alt-c = 'workspace C'    # work comms (mail, teams, slack)
-alt-d = ['workspace D', 'exec-and-forget open -a Discord; open -a Messages']
+alt-d = 'workspace D'    # personal chat (discord, messages)
 alt-m = 'workspace M'    # media
 
 # Send window to workspace, follow it, and split with whatever is already there.
