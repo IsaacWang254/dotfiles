@@ -8,7 +8,7 @@ Personal config, portable across machines.
 |------|-------|-------|
 | **fish** shell | [`fish/`](fish/) | Aliases, stock prompt + default theme, [fisher](https://github.com/jorgebucaran/fisher) |
 | **Karabiner-Elements** key remap (macOS) | [`karabiner/`](karabiner/) | CapsLock → Esc on tap, Control on hold |
-| **AeroSpace** tiling WM (macOS) | [`aerospace/`](aerospace/) | Keyboard-driven tiling via [AeroSpace](https://github.com/nikitabobko/AeroSpace) |
+| **Rectangle** window management (macOS) | [`rectangle/`](rectangle/) | Imported Rectangle shortcuts and settings |
 | **Corne** keyboard keymap | [`corne/`](corne/) | 42-key split on a 2.4GHz dongle; keymap written over raw HID, not flashed |
 | **Ghostty** terminal | [`ghostty/`](ghostty/) | JetBrains Mono; Vercel Light/Dark, follows the system appearance |
 | **Homebrew** packages | [`Brewfile`](Brewfile) | Taps, formulae, casks, editor extensions, global npm packages |
@@ -88,51 +88,11 @@ notes are in the git history if this ever needs revisiting.
 
 ---
 
-## AeroSpace (tiling window manager)
+## Rectangle (window management)
 
-Keyboard-driven i3-style tiling. No SIP disabling required. Modifier is **Option (alt)**.
+The [Rectangle export](rectangle/RectangleConfig.json) is copied from [Mitchell Hashimoto’s nixos-config](https://github.com/mitchellh/nixos-config/blob/789705271e204ff3cd9f9735e2d88632a6856c18/users/mitchellh/RectangleConfig.json). It includes his shortcuts and preferences, including launch at login and a hidden menu-bar icon.
 
-### Keybindings
-
-Workspaces are named by purpose rather than numbered, and every binding sits on
-the Corne's base layer — one thumb plus one key. See [`corne/`](corne/) for why:
-that keyboard reaches Alt only through the right thumb's hold and keeps its
-digits a layer down, so `alt-1` would pin both thumbs.
-
-| Keys | Action |
-|------|--------|
-| `alt` + `h/j/k/l` | Focus window left/down/up/right |
-| `alt-shift` + `h/j/k/l` | Move window |
-| `alt` + `e/t/b/n/c/m` | Switch to workspace **E**ditor / **T**erminal / **B**rowser / **N**otes / **C**hat / **M**edia |
-| `alt-shift` + `e/t/b/n/c/m` | Send window to that workspace (and follow) |
-| `alt-tab` | Previous workspace |
-| `alt-shift-tab` | Move workspace to the next monitor |
-| `alt-;` / `alt-'` | Resize smaller / larger |
-| `alt-shift-'` | Balance sizes |
-| `alt-/` | Toggle tiling orientation |
-| `alt-,` | Accordion layout |
-| `alt-f` | Fullscreen |
-| `alt-shift-space` | Float / unfloat window |
-| `alt-shift-;` | Enter *service* mode (then `esc` back; `c` reload config, `r` reset tree, `backspace` close others, `alt-shift-hjkl` join) |
-
-Apps are sent to their workspace on launch by the `on-window-detected` rules at
-the top of the config — editors to `E`, Ghostty to `T`, browsers to `B`, and so
-on. Anything not listed opens where you are.
-
-### Setup
-
-```sh
-brew install --cask nikitabobko/tap/aerospace
-```
-
-1. `install.sh` symlinks `aerospace/aerospace.toml` → `~/.config/aerospace/`.
-2. Launch AeroSpace (it lives in the menu bar) and grant it **Accessibility**
-   (System Settings → Privacy & Security → Accessibility).
-3. **Quit Rectangle / Magnet / other window managers** and turn off their
-   "open at login" — running two window managers fights over window placement.
-4. `start-at-login = true` is set, so it comes back on reboot.
-
-Edit `aerospace/aerospace.toml`, then `alt-shift-c` (or `aerospace reload-config`) to apply.
+Install with `brew install --cask rectangle`, launch Rectangle, and grant Accessibility access. In Rectangle settings, import `rectangle/RectangleConfig.json`. Importing replaces existing Rectangle preferences; the installer does not import it automatically. Quit other window managers to avoid conflicts.
 
 ---
 
@@ -173,7 +133,6 @@ thumbs — symbols and digits on `MO(1)`, function keys and arrows on `MO(2)`.
 Full layer diagrams and the device's raw-HID details are in
 [`corne/README.md`](corne/README.md).
 
-The AeroSpace bindings above are shaped around this keyboard.
 
 ## fish (shell)
 

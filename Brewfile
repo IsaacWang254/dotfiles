@@ -1,5 +1,4 @@
 tap "maddada/tap", trusted: true
-tap "nikitabobko/tap"
 tap "steipete/tap"
 tap "tmad4000/nosleep"
 # Code searching, linting, rewriting
@@ -53,8 +52,8 @@ brew "zsh-autosuggestions"
 brew "zsh-syntax-highlighting"
 # Keep your Mac awake (even with the lid closed) — a friendly wrapper for pmset
 brew "tmad4000/nosleep/nosleep", trusted: true
-# AeroSpace is an i3-like tiling window manager for macOS
-cask "nikitabobko/tap/aerospace", trusted: true
+# Window management with customizable shortcuts
+cask "rectangle"
 # Menu bar usage monitor for Codex and Claude
 cask "steipete/tap/codexbar", trusted: true
 # Workspace and session UI for agent terminals

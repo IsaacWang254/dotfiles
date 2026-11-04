@@ -40,10 +40,7 @@ Layer 1 (hold MO1, left thumb)      Layer 2 (hold MO2, right thumb)
  Shift 6 7 8 9 0  ‖ ~ _ + [ ]  |     RGB/prev-next ‖ _ + { } |  RAlt
 ```
 
-`Esc*` is `MT(MOD_RALT, KC_ESC)` — tap for Escape, hold for Right Alt. It is the
-only Alt on the base layer, which is why the AeroSpace bindings in this repo use
-`alt` plus a base-layer *letter* rather than a number (digits live on layer 1, so
-`alt-1` would need both thumbs). See `../aerospace/aerospace.toml`.
+`Esc*` is `MT(MOD_RALT, KC_ESC)` — tap for Escape, hold for Right Alt. It is the only Alt on the base layer; digits live on layer 1.
 
 Layer 3 is the tri-layer (hold both MO1 and MO2) and carries `QK_BOOT` plus RGB
 controls. This board has no RGB, and the firmware probably has no tri-layer, so

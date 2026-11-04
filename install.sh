@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 #
 # dotfiles installer.
-# Puts the configs in this repo into place: Ghostty and AeroSpace are
-# symlinked, Karabiner is copied (it rewrites its own file). Needs no sudo.
+# Puts the configs in this repo into place. Ghostty is symlinked and
+# Karabiner is copied (it rewrites its own file). Needs no sudo.
 # It does NOT install applications or grant macOS permissions — see README.md.
 #
 set -euo pipefail
@@ -82,19 +82,10 @@ for theme in "Vercel Light" "Vercel Dark"; do
 done
 
 # ---------------------------------------------------------------------------
-# AeroSpace (tiling window manager)
+# Rectangle (window management)
 # ---------------------------------------------------------------------------
-echo "==> Symlinking AeroSpace config -> ~/.config/aerospace/aerospace.toml"
-mkdir -p "$HOME/.config/aerospace"
-ln -sf "$DOTFILES/aerospace/aerospace.toml" "$HOME/.config/aerospace/aerospace.toml"
-
-if ! command -v aerospace >/dev/null 2>&1; then
-  echo "   note: AeroSpace not installed. Install with:"
-  echo "         brew install --cask nikitabobko/tap/aerospace"
-  echo "         then grant it Accessibility and quit Rectangle (see README)."
-else
-  aerospace reload-config 2>/dev/null || true
-fi
+echo "==> Rectangle config: import $DOTFILES/rectangle/RectangleConfig.json in Rectangle settings"
+echo "   note: importing replaces Rectangle preferences; it is not done automatically."
 
 # ---------------------------------------------------------------------------
 # Corne keyboard (w-corne-choc, 2.4GHz dongle)
@@ -245,5 +236,5 @@ echo
 echo "Manual steps this script does NOT do:"
 echo "  - Karabiner-Elements: grant Input Monitoring (System Settings > Privacy"
 echo "    & Security) the first time it runs."
-echo "  - AeroSpace: grant Accessibility, and quit Rectangle/Magnet if running."
+echo "  - Rectangle: import rectangle/RectangleConfig.json and grant Accessibility."
 echo "  - Corne: the keymap is not applied by this script. See corne/README.md."
